@@ -1,8 +1,8 @@
-﻿using ChatX.Models;
+﻿using Chatx.Models;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 
-namespace ChatX.Data
+namespace Chatx.Data
 {
     public class AppDbContext : DbContext
     {
