@@ -9,17 +9,11 @@ namespace ChatX.Controllers
     [ApiController]
     public class APIController : ControllerBase
     {
-        private readonly Data.AppDbContext database;
+        private readonly AppDbContext database;
 
-        public APIController(Data.AppDbContext database)
+        public APIController(AppDbContext database)
         {
             this.database = database;
-        }
-
-        [HttpGet]
-        public string Get()
-        {
-            return "Example";
         }
     }
 }

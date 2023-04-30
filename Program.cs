@@ -23,19 +23,28 @@ builder.Services.AddAuthentication(options =>
 
         string subject = context.Principal.FindFirstValue(ClaimTypes.NameIdentifier);
         string issuer = context.Principal.FindFirst(ClaimTypes.NameIdentifier).Issuer;
+        string name = context.Principal.FindFirst(ClaimTypes.Name).Value;
 
-        var author = db.Accounts.FirstOrDefault(p => p.OpenIDIssuer == issuer && p.OpenIDSubject == subject);
+        var account = db.Accounts
+            .FirstOrDefault(p => p.OpenIDIssuer == issuer && p.OpenIDSubject == subject);
 
-        if (author == null)
+        if (account == null)
         {
-            author = new Account
+            account = new Account
             {
                 OpenIDIssuer = issuer,
-                OpenIDSubject = subject
+                OpenIDSubject = subject,
+                Name = name
             };
-            db.Accounts.Add(author);
-            await db.SaveChangesAsync();
+            db.Accounts.Add(account);
         }
+        else
+        {
+            // If the account already exists, just update the name in case it has changed.
+            account.Name = name;
+        }
+
+        await db.SaveChangesAsync();
     };
 })
 .AddOpenIdConnect("Google", options =>
