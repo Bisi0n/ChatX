@@ -5,30 +5,29 @@
     ViewData["Title"] = "Home page";
 }
 
-<h1>Welcome, @accessControl.LoggedInAccountName!</h1>
 
+<header>
+    <h1>Welcome, @accessControl.LoggedInAccountName!</h1>
+</header>
 
-<div class="container">
-    <div class="row p-1">
-        <div class="col-6">
-            <ul id="messagesList"></ul>
+<body>
+    <main class="container">
+        <div class="msglist">
+            <ul>
+                <li id="messagesList">
+                </li>
+            </ul>
         </div>
-    </div>
-    <div class="row p-1">
-        <div class="col-1">Message</div>
-        <div class="col-5"><input type="text" class="w-100" id="messageInput" /></div>
-    </div>
-    <div class="row p-1">
-        <div class="col-6 text-end">
+        <div class="">
+            <p>Message</p>
+            <input type="text" id="messageInput" />
+        </div>
+        <div>
             <input type="button" id="sendButton" value="Send Message" />
         </div>
-    </div>
-    <div class="row p-1">
-        <div class="col-6">
-            <hr />
-        </div>
-    </div>
-</div>
+    </main>
+</body>
+
 <script src="~/js/signalr/dist/browser/signalr.js"></script>
 <script src="~/js/chat.js"></script>
 @*JS user in razor*@

@@ -1,0 +1,19 @@
+html {
+    box-sizing: border-box;
+    margin-right: auto;
+    margin-left: auto;
+    background-color: black;
+}
+
+.msglist {
+    color: white;
+}
+
+h1 {
+    color: gold;
+    text-align:center;
+}
+
+li {
+    list-style-type: none;
+}
