@@ -6,6 +6,19 @@
 }
 
 
+@*<form method="post">
+    <div>
+        <label for="user">User:</label>
+        <input type="text" id="user" name="user" />
+    </div>
+    <div>
+        <label for="message">Message:</label>
+        <input type="text" id="message" name="message" />
+    </div>
+    <button type="submit">Send</button>
+</form>*@
+
+
 <header>
     <h1>Welcome, @accessControl.LoggedInAccountName!</h1>
 </header>
@@ -32,3 +45,5 @@
 <script src="~/js/chat.js"></script>
 @*JS user in razor*@
 <script>var loggedInUser = "@accessControl.LoggedInAccountName"</script>
+@*https://www.npmjs.com/package/twemoji*@
+<script src="https://twemoji.maxcdn.com/v/latest/twemoji.min.js" crossorigin="anonymous"></script>
