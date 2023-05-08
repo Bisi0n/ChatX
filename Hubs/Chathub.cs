@@ -1,15 +1,31 @@
-﻿using Microsoft.AspNetCore.SignalR;
-
+﻿using ChatX.Data;
+using ChatX.Models;
+using Microsoft.AspNetCore.SignalR;
+using Microsoft.EntityFrameworkCore.Storage;
 
 namespace ChatX.Hubs
 {
     public class Chathub : Hub
     {
+        private readonly AppDbContext database;
+
+        public Chathub (AppDbContext historyDb)
+        {
+            database = historyDb;
+        }
         public async Task SendMessage(string user, string message)
         {
-            await Clients.All.SendAsync("ReceiveMessage", user, message);
+            var messageHistory = new History
+            {
+                User = user,
+                Message = message,
+                Date = DateTime.Now
+            };
 
-            //Save later to db
+            database.Historys.Add(messageHistory);
+            await database.SaveChangesAsync();
+
+            await Clients.All.SendAsync("ReceiveMessage", user, message);
         }
 
         public async Task AddEmoji(string user, string message, string emoji)
