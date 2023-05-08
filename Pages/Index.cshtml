@@ -3,47 +3,27 @@
 @inject ChatX.Data.AccessControl accessControl
 @{
     ViewData["Title"] = "Home page";
+    
 }
 
 
-@*<form method="post">
-    <div>
-        <label for="user">User:</label>
-        <input type="text" id="user" name="user" />
-    </div>
-    <div>
-        <label for="message">Message:</label>
-        <input type="text" id="message" name="message" />
-    </div>
-    <button type="submit">Send</button>
-</form>*@
-
-
-<header>
-    <h1>Welcome, @accessControl.LoggedInAccountName!</h1>
-</header>
-
-<body>
-    <main class="container">
-        <div class="msglist">
-            <ul>
-                <li id="messagesList">
-                </li>
-            </ul>
-        </div>
-        <div class="">
-            <p>Message</p>
-            <input type="text" id="messageInput" />
-        </div>
-        <div>
-            <input type="button" id="sendButton" value="Send Message" />
-        </div>
-    </main>
-</body>
-
+<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
 <script src="~/js/signalr/dist/browser/signalr.js"></script>
-<script src="~/js/chat.js"></script>
-@*JS user in razor*@
-<script>var loggedInUser = "@accessControl.LoggedInAccountName"</script>
-@*https://www.npmjs.com/package/twemoji*@
-<script src="https://twemoji.maxcdn.com/v/latest/twemoji.min.js" crossorigin="anonymous"></script>
+<script defer src="~/js/chat.js"></script>
+
+<div id="app">
+    <div v-if="!connected">
+        <p>Connecting to server...</p>
+    </div>
+    <div v-else>
+        <h1>ChatX</h1>
+        <div v-for="message in messages" :key="message.id">
+            <p>@accessControl.LoggedInAccountName: {{ message.content }}</p>
+            <button v-if="message.sender === currentUser" v-on:click="deleteMessage(message.id)">Delete</button>
+        </div>
+        <form v-on:submit.prevent="sendMessage">
+            <input type="text" v-model="newMessage" />
+            <button>Send</button>
+        </form>
+    </div>
+</div>

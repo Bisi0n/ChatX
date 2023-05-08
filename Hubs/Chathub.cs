@@ -1,36 +1,32 @@
-﻿using ChatX.Data;
-using ChatX.Models;
+﻿using ChatX.Models;
 using Microsoft.AspNetCore.SignalR;
-using Microsoft.EntityFrameworkCore.Storage;
 
 namespace ChatX.Hubs
 {
     public class Chathub : Hub
     {
-        private readonly AppDbContext database;
+        private static int _messageId = 0;
 
-        public Chathub (AppDbContext historyDb)
+        public async Task SendMessage(string user, string messageContent)
         {
-            database = historyDb;
-        }
-        public async Task SendMessage(string user, string message)
-        {
-            var messageHistory = new History
+            Message message = new()
             {
-                User = user,
-                Message = message,
-                Date = DateTime.Now
+                Id = Interlocked.Increment(ref _messageId),
+                Content = messageContent,
+                Sender = user,
+                TimeStamp = DateTime.UtcNow
             };
 
-            database.Historys.Add(messageHistory);
-            await database.SaveChangesAsync();
+            // If we want to store messages, add them here to a db
 
-            await Clients.All.SendAsync("ReceiveMessage", user, message);
+            await Clients.All.SendAsync("ReceiveMessage", message);
         }
 
-        public async Task AddEmoji(string user, string message, string emoji)
+        public async Task DeleteMessage(int id)
         {
-            await Clients.All.SendAsync($"ReceiveReaction", user, message, emoji);
+            // Delete from db here
+
+            await Clients.All.SendAsync("deleteMessageRemote", id);
         }
     }
 }
