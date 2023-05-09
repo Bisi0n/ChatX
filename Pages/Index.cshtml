@@ -3,33 +3,41 @@
 @inject ChatX.Data.AccessControl accessControl
 @{
     ViewData["Title"] = "Home page";
+    
 }
 
-<h1>Welcome, @accessControl.LoggedInAccountName!</h1>
 
-
-<div class="container">
-    <div class="row p-1">
-        <div class="col-6">
-            <ul id="messagesList"></ul>
-        </div>
-    </div>
-    <div class="row p-1">
-        <div class="col-1">Message</div>
-        <div class="col-5"><input type="text" class="w-100" id="messageInput" /></div>
-    </div>
-    <div class="row p-1">
-        <div class="col-6 text-end">
-            <input type="button" id="sendButton" value="Send Message" />
-        </div>
-    </div>
-    <div class="row p-1">
-        <div class="col-6">
-            <hr />
-        </div>
-    </div>
-</div>
+<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
 <script src="~/js/signalr/dist/browser/signalr.js"></script>
-<script src="~/js/chat.js"></script>
-@*JS user in razor*@
-<script>var loggedInUser = "@accessControl.LoggedInAccountName"</script>
+<script defer src="~/js/chat.js"></script>
+<script src="https://twemoji.maxcdn.com/v/latest/twemoji.min.js" crossorigin="anonymous"></script>
+
+
+<main>
+    <div id="app">
+        <div class="container">
+            <div v-if="!connected">
+                <p>Connecting to server...</p>
+            </div>
+            <div v-else>
+                <h1>ChatX</h1>
+                <div class="list-container" v-for="message in messages" :key="message.id">
+                    <div id="userMsg" v-if="message.sender === @accessControl.LoggedInAccountID">
+                        <p>@accessControl.LoggedInAccountName: {{ message.content }}</p>
+                        <button class="delete-mark" v-on:click="deleteMessage(message.id)"></button>
+                    </div>
+                    <div id="msg" v-else>
+                        <p>{{ message.senderName }} {{ message.content }}</p>
+                    </div>
+                </div>
+                <form v-on:submit.prevent="sendMessage">
+                    <input id="messageInput" type="text" v-model="newMessage" />
+                    <button id="sendButton">Send</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</main>
+
+<script>var loggedInUser = @accessControl.LoggedInAccountID</script>
+<script>var loggedInUserName = "@accessControl.LoggedInAccountName"</script>

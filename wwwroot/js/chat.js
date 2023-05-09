@@ -1,31 +1,54 @@
-"use strict";
+﻿const app = Vue.createApp({
+    data() {
+        return {
+            connection: null,
+            connected: false,
+            currentUser: null,
+            messages: [],
+            newMessage: ''
+        };
+    },
+    mounted() {
+        this.connect();
+    },
+    methods: {
+        connect() {
+            const url = 'https://localhost:5000/chatHub';
+            this.connection = new signalR.HubConnectionBuilder()
+                .withUrl(url)
+                .withAutomaticReconnect()
+                .build();
 
-var connection = new signalR.HubConnectionBuilder().withUrl("/chatHub").build();
-var now = new Date();
-var time = `${now.getHours()}:${now.getMinutes()}`
+            this.connection.on('ReceiveMessage', (message) => {
+                this.messages.push(message);
+            });
 
-//Disable the send button until connection is established.
-document.getElementById("sendButton").disabled = true;
+            this.connection.on('deleteMessageRemote', (id) => {
+                this.messages = this.messages.filter(message => message.id !== id);
+            });
 
-connection.on("ReceiveMessage", function (user, message) {
-    var li = document.createElement("li");
-    document.getElementById("messagesList").appendChild(li);
-    // We can assign user-supplied strings to an element's textContent because it
-    // is not interpreted as markup. If you're assigning in any other way, you 
-    // should be aware of possible script injection concerns.
-    li.textContent = `${user} ${time} says ${message}`;
+            this.connection.start().then(() => {
+                this.connected = true;
+                this.currentUser = this.connection.connectionId;
+            }).catch((err) => {
+                console.error(err);
+            });
+        },
+        sendMessage() {
+            this.connection.invoke('SendMessage', loggedInUserName, loggedInUser, this.newMessage).then(() => {
+                this.newMessage = '';
+            }).catch((err) => {
+                console.error(err);
+            });
+
+            console.log(this.messages);
+        },
+        deleteMessage(id) {
+            this.connection.invoke('DeleteMessage', id).catch((err) => {
+                console.error(err);
+            });
+        }
+    },
 });
 
-connection.start().then(function () {
-    document.getElementById("sendButton").disabled = false;
-}).catch(function (err) {
-    return console.error(err.toString());
-});
-
-document.getElementById("sendButton").addEventListener("click", function (event) {
-    var message = document.getElementById("messageInput").value;
-    connection.invoke("SendMessage", loggedInUser, message).catch(function (err) {
-        return console.error(err.toString());
-    });
-    event.preventDefault();
-});
+app.mount('#app');
