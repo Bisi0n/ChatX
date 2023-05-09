@@ -1,4 +1,5 @@
-﻿using ChatX.Models;
+﻿using ChatX.Data;
+using ChatX.Models;
 using Microsoft.AspNetCore.SignalR;
 
 namespace ChatX.Hubs
@@ -7,13 +8,14 @@ namespace ChatX.Hubs
     {
         private static int _messageId = 0;
 
-        public async Task SendMessage(string user, string messageContent)
+        public async Task SendMessage(string loggedInUserName, int loggedInUser, string messageContent)
         {
             Message message = new()
             {
                 Id = Interlocked.Increment(ref _messageId),
                 Content = messageContent,
-                Sender = user,
+                Sender = loggedInUser,
+                SenderName = loggedInUserName,
                 TimeStamp = DateTime.UtcNow
             };
 

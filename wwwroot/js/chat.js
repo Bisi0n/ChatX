@@ -35,7 +35,7 @@
             });
         },
         sendMessage() {
-            this.connection.invoke('SendMessage', this.currentUser, this.newMessage).then(() => {
+            this.connection.invoke('SendMessage', loggedInUserName, loggedInUser, this.newMessage).then(() => {
                 this.newMessage = '';
             }).catch((err) => {
                 console.error(err);
