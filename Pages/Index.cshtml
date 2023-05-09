@@ -24,12 +24,10 @@
                 <div class="list-container" v-for="message in messages" :key="message.id">
                     <div id="userMsg" v-if="message.sender === @accessControl.LoggedInAccountID">
                         <p>@accessControl.LoggedInAccountName: {{ message.content }}</p>
-                        <button v-if="message.sender === currentUser" v-on:click="deleteMessage(message.id)">Delete</button>
-                        <button type="button" class="delete-mark" v-on:click="deleteMessage(message.id)">delete</button>
+                        <button class="delete-mark" v-on:click="deleteMessage(message.id)"></button>
                     </div>
                     <div id="msg" v-else>
                         <p>{{ message.senderName }} {{ message.content }}</p>
-                        <button v-if="message.sender === currentUser" v-on:click="deleteMessage(message.id)">Delete</button>
                     </div>
                 </div>
                 <form v-on:submit.prevent="sendMessage">

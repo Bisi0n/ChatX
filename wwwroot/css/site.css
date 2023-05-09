@@ -53,22 +53,22 @@ h1 {
     font-size: large;
 }
 
-/*li:hover .delete-mark {
-    display: flex;
-}
-*/
-/*.delete-mark::before {
-    display: flex;
+
+.delete-mark::before {
     content: '❌';
 }
 
-.delete-mark {
+/*.delete-mark {
     background-color: rgb(159, 156, 156);
     border: none;
     box-shadow: none;
     display: none;
-}*/
+}
 
+li:hover .delete-mark {
+    display: flex;
+}
+*/
 #userMsg {
     display: grid;
     grid-template:
