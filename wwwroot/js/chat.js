@@ -19,6 +19,10 @@
                 .withAutomaticReconnect()
                 .build();
 
+            this.connection.on('ReceiveMessageHistory', (messages) => {
+                this.messages = messages;
+            });
+
             this.connection.on('ReceiveMessage', (message) => {
                 this.messages.push(message);
             });
@@ -30,7 +34,13 @@
             this.connection.start().then(() => {
                 this.connected = true;
                 this.currentUser = this.connection.connectionId;
+                this.loadPreviousMessages();
             }).catch((err) => {
+                console.error(err);
+            });
+        },
+        loadPreviousMessages() {
+            this.connection.invoke('LoadPreviousMessages').catch((err) => {
                 console.error(err);
             });
         },
