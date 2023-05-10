@@ -40,8 +40,6 @@
             }).catch((err) => {
                 console.error(err);
             });
-
-            console.log(this.messages);
         },
         deleteMessage(id) {
             this.connection.invoke('DeleteMessage', id).catch((err) => {

@@ -7,19 +7,17 @@ namespace ChatX.Hubs
 {
     public class Chathub : Hub
     {
-        private static int _messageId = 0;
-        private readonly AppDbContext database;
+        private readonly AppDbContext _db;
 
         public Chathub (AppDbContext context)
         {
-            database = context;
+            _db = context;
         }
 
         public async Task SendMessage(string loggedInUserName, int loggedInUser, string messageContent)
         {
             Message message = new()
             {
-                Id = Interlocked.Increment(ref _messageId),
                 Content = messageContent,
                 Sender = loggedInUser,
                 SenderName = loggedInUserName,
@@ -27,15 +25,8 @@ namespace ChatX.Hubs
             };
 
             // Save message to db
-            History messageHistory = new()
-            {
-                MessageId = Interlocked.Increment(ref _messageId),
-                User = loggedInUserName,
-                Content = messageContent,
-                TimeStamp = DateTime.UtcNow
-            };
-            database.Historys.Add(messageHistory);
-            await database.SaveChangesAsync();
+            await _db.Messages.AddAsync(message);
+            await _db.SaveChangesAsync();
 
             await Clients.All.SendAsync("ReceiveMessage", message);
         }
