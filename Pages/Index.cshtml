@@ -7,19 +7,25 @@
 }
 
 
+<<<<<<< Updated upstream
 <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
 <script src="~/js/signalr/dist/browser/signalr.js"></script>
 <script defer src="~/js/chat.js"></script>
+<link src=" ~ /css/site.css" rel="stylesheet">
 <script src="https://twemoji.maxcdn.com/v/latest/twemoji.min.js" crossorigin="anonymous"></script>
+=======
 
 
 <main>
     <div id="app">
         <div class="container">
+
             <div v-if="!connected">
                 <p>Connecting to server...</p>
             </div>
+
             <div v-else>
+
                 <h1>ChatX</h1>
                 <div class="list-container" v-for="message in messages" :key="message.id">
                     <div id="userMsg" v-if="message.sender === @accessControl.LoggedInAccountID">
@@ -34,10 +40,16 @@
                     <input id="messageInput" type="text" v-model="newMessage" />
                     <button id="sendButton">Send</button>
                 </form>
+
             </div>
         </div>
     </div>
 </main>
 
+<<<<<<< Updated upstream
 <script>var loggedInUser = @accessControl.LoggedInAccountID</script>
 <script>var loggedInUserName = "@accessControl.LoggedInAccountName"</script>
+=======
+</body>
+
+

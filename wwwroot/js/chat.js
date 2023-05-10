@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream
 ﻿const app = Vue.createApp({
     data() {
         return {
@@ -19,18 +20,31 @@
                 .withAutomaticReconnect()
                 .build();
 
+            this.connection.on('ReceiveMessageHistory', (messages) => {
+                this.messages = messages;
+            });
+
             this.connection.on('ReceiveMessage', (message) => {
                 this.messages.push(message);
             });
 
-            this.connection.on('deleteMessageRemote', (id) => {
+>>>>>>> Stashed changes
+
+            this.connection.on('DeleteMessage', (id) => {
                 this.messages = this.messages.filter(message => message.id !== id);
             });
 
+<<<<<<< Updated upstream
             this.connection.start().then(() => {
                 this.connected = true;
                 this.currentUser = this.connection.connectionId;
+                this.loadPreviousMessages();
             }).catch((err) => {
+                console.error(err);
+            });
+        },
+        loadPreviousMessages() {
+            this.connection.invoke('LoadPreviousMessages').catch((err) => {
                 console.error(err);
             });
         },
@@ -40,8 +54,6 @@
             }).catch((err) => {
                 console.error(err);
             });
-
-            console.log(this.messages);
         },
         deleteMessage(id) {
             this.connection.invoke('DeleteMessage', id).catch((err) => {
