@@ -1,6 +1,7 @@
 ﻿using ChatX.Data;
 using ChatX.Models;
 using Microsoft.AspNetCore.SignalR;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Scaffolding.Metadata;
 
 namespace ChatX.Hubs
@@ -37,6 +38,13 @@ namespace ChatX.Hubs
             // Counsult with Customer if to keep/delete the message history
             
             await Clients.All.SendAsync("DeleteMessage", id);
+        }
+
+        public async Task LoadPreviousMessages()
+        {
+            Message[] messages = await _db.Messages.ToArrayAsync();
+
+            await Clients.Caller.SendAsync("ReceiveMessageHistory", messages);
         }
     }
 }
