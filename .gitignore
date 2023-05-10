@@ -4,3 +4,4 @@ obj/
 *.csproj.user
 .vscode/
 appsettings.Development.json
+Migrations/
