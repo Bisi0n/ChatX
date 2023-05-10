@@ -13,7 +13,7 @@
     },
     methods: {
         connect() {
-            const url = 'https://localhost:5000/chatHub';
+            const url = '/chatHub';
             this.connection = new signalR.HubConnectionBuilder()
                 .withUrl(url)
                 .withAutomaticReconnect()
