@@ -13,24 +13,34 @@
     },
     methods: {
         connect() {
-            const url = 'https://localhost:5000/chatHub';
+            const url = '/chatHub';
             this.connection = new signalR.HubConnectionBuilder()
                 .withUrl(url)
                 .withAutomaticReconnect()
                 .build();
 
+            this.connection.on('ReceiveMessageHistory', (messages) => {
+                this.messages = messages;
+            });
+
             this.connection.on('ReceiveMessage', (message) => {
                 this.messages.push(message);
             });
 
-            this.connection.on('deleteMessageRemote', (id) => {
+            this.connection.on('DeleteMessage', (id) => {
                 this.messages = this.messages.filter(message => message.id !== id);
             });
 
             this.connection.start().then(() => {
                 this.connected = true;
                 this.currentUser = this.connection.connectionId;
+                this.loadPreviousMessages();
             }).catch((err) => {
+                console.error(err);
+            });
+        },
+        loadPreviousMessages() {
+            this.connection.invoke('LoadPreviousMessages').catch((err) => {
                 console.error(err);
             });
         },
@@ -40,8 +50,6 @@
             }).catch((err) => {
                 console.error(err);
             });
-
-            console.log(this.messages);
         },
         deleteMessage(id) {
             this.connection.invoke('DeleteMessage', id).catch((err) => {
