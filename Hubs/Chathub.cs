@@ -8,7 +8,8 @@ namespace ChatX.Hubs
 {
     public class Chathub : Hub
     {
-        private readonly AppDbContext _db;
+        private static int _messageId = 0;
+        private readonly AppDbContext database;
 
         public Chathub (AppDbContext context)
         {
@@ -37,14 +38,7 @@ namespace ChatX.Hubs
             // Delete from db here
             // Counsult with Customer if to keep/delete the message history
             
-            await Clients.All.SendAsync("DeleteMessage", id);
-        }
-
-        public async Task LoadPreviousMessages()
-        {
-            Message[] messages = await _db.Messages.ToArrayAsync();
-
-            await Clients.Caller.SendAsync("ReceiveMessageHistory", messages);
+            await Clients.All.SendAsync("deleteMessageRemote", id);
         }
     }
 }
