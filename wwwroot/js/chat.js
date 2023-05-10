@@ -23,7 +23,7 @@
                 this.messages.push(message);
             });
 
-            this.connection.on('deleteMessageRemote', (id) => {
+            this.connection.on('DeleteMessage', (id) => {
                 this.messages = this.messages.filter(message => message.id !== id);
             });
 

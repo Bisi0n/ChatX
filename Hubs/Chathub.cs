@@ -36,7 +36,7 @@ namespace ChatX.Hubs
             // Delete from db here
             // Counsult with Customer if to keep/delete the message history
             
-            await Clients.All.SendAsync("deleteMessageRemote", id);
+            await Clients.All.SendAsync("DeleteMessage", id);
         }
     }
 }
