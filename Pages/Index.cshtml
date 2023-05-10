@@ -11,33 +11,21 @@
 <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
 <script src="~/js/signalr/dist/browser/signalr.js"></script>
 <script defer src="~/js/chat.js"></script>
+<link src=" ~ /css/site.css" rel="stylesheet">
 <script src="https://twemoji.maxcdn.com/v/latest/twemoji.min.js" crossorigin="anonymous"></script>
 =======
-<body>
-
-    <main>
-        <h1>Welcome, @accessControl.LoggedInAccountName!</h1>
->>>>>>> Stashed changes
 
 
 <main>
     <div id="app">
         <div class="container">
-<<<<<<< Updated upstream
+
             <div v-if="!connected">
                 <p>Connecting to server...</p>
-=======
-
-            <div class="input-container">
-
-                <label for="msg" class="msgLabel">
-                    Message: <input type="text" class="w-100" id="messageInput" name="msg"/>
-                </label>
-
-                <input type="button" id="sendButton" value="Send Message" />
->>>>>>> Stashed changes
             </div>
+
             <div v-else>
+
                 <h1>ChatX</h1>
                 <div class="list-container" v-for="message in messages" :key="message.id">
                     <div id="userMsg" v-if="message.sender === @accessControl.LoggedInAccountID">
@@ -52,6 +40,7 @@
                     <input id="messageInput" type="text" v-model="newMessage" />
                     <button id="sendButton">Send</button>
                 </form>
+
             </div>
         </div>
     </div>
@@ -62,9 +51,5 @@
 <script>var loggedInUserName = "@accessControl.LoggedInAccountName"</script>
 =======
 </body>
-<link src=" ~ /css/site.css" rel="stylesheet">
-<script src="~/js/signalr/dist/browser/signalr.js"></script>
-<script src="~/js/chat.js"></script>
 
 
->>>>>>> Stashed changes
