@@ -1,4 +1,4 @@
-<<<<<<< Updated upstream
+
 ﻿const app = Vue.createApp({
     data() {
         return {
@@ -28,13 +28,11 @@
                 this.messages.push(message);
             });
 
->>>>>>> Stashed changes
 
             this.connection.on('DeleteMessage', (id) => {
                 this.messages = this.messages.filter(message => message.id !== id);
             });
 
-<<<<<<< Updated upstream
             this.connection.start().then(() => {
                 this.connected = true;
                 this.currentUser = this.connection.connectionId;

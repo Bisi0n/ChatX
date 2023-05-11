@@ -36,6 +36,7 @@
                         <p>{{ message.senderName }} {{ message.content }}</p>
                     </div>
                 </div>
+
                 <form v-on:submit.prevent="sendMessage">
                     <input id="messageInput" type="text" v-model="newMessage" />
                     <button id="sendButton">Send</button>
@@ -49,7 +50,5 @@
 <<<<<<< Updated upstream
 <script>var loggedInUser = @accessControl.LoggedInAccountID</script>
 <script>var loggedInUserName = "@accessControl.LoggedInAccountName"</script>
-=======
-</body>
 
 
