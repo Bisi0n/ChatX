@@ -8,6 +8,7 @@ namespace ChatX.Hubs
     public class Chathub : Hub
     {
         private readonly AppDbContext _db;
+        private List<Account> _usersCurrentlyTyping = new();
 
         public Chathub (AppDbContext context)
         {
@@ -49,6 +50,22 @@ namespace ChatX.Hubs
                 .Where(m => !m.IsDeleted).ToArrayAsync();
 
             await Clients.Caller.SendAsync("ReceiveMessageHistory", messages);
+        }
+
+        public async Task UserTyping(int loggedInUser, bool isTyping)
+        {
+            Account user = await _db.Accounts.Where(u => u.Id == loggedInUser).SingleAsync();
+
+            if (isTyping)
+            {
+                _usersCurrentlyTyping.Add(user);
+            }
+            else
+            {
+                _usersCurrentlyTyping.Remove(user);
+            }
+
+             await Clients.All.SendAsync("CurrentlyTyping", _usersCurrentlyTyping);
         }
     }
 }

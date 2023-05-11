@@ -7,7 +7,11 @@ const app = Vue.createApp({
             connected: false,
             currentUser: null,
             messages: [],
-            newMessage: ''
+            newMessage: '',
+            isTyping: false,
+            typingTimeout: null,
+            usersCurrentlyTyping: [],
+            timeoutDuration: 2500
         };
     },
     mounted() {
@@ -31,6 +35,10 @@ const app = Vue.createApp({
 
             this.connection.on('DeleteMessage', (id) => {
                 this.messages = this.messages.filter(message => message.id !== id);
+            });
+
+            this.connection.on('CurrentlyTyping', (usersTyping) => {
+                this.usersCurrentlyTyping = usersTyping;
             });
 
             this.connection.start().then(() => {
@@ -57,7 +65,28 @@ const app = Vue.createApp({
             this.connection.invoke('DeleteMessage', id).catch((err) => {
                 console.error(err);
             });
-        }
+        },
+        currentlyTyping() {
+            clearTimeout(this.typingTimeout);
+
+            if (!this.isTyping) {
+                this.connection.send('UserTyping', loggedInUser, true)
+                    .then(() => {
+                        this.isTyping = true;
+                    })
+                    .catch(err => console.error(err));
+            }
+
+            // Set a timeout to detect when the user stops typing
+            this.typingTimeout = setTimeout(() => {
+                // Send typing indicator to the server indicating the user stopped typing
+                this.connection.send('UserTyping', loggedInUser, false)
+                    .then(() => {
+                        this.isTyping = false;
+                    })
+                    .catch(err => console.error(err));
+            }, this.timeoutDuration); // Adjust the timeout duration as needed
+        },
     }
 });
 

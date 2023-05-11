@@ -68,8 +68,8 @@ h1 {
 
 li:hover .delete-mark {
     display: flex;
-}
-*/
+}*/
+
 #userMsg {
     display: grid;
     grid-template:
@@ -89,4 +89,10 @@ li:hover .delete-mark {
     background-color: rgb(193, 165, 3);
     text-align: start;
     list-style: none;
+}
+
+/*Fix this later*/
+.currently-typing {
+    color: whitesmoke;
+    font-size: large;
 }
