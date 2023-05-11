@@ -1,4 +1,6 @@
-﻿const app = Vue.createApp({
+﻿const rootElement = document.querySelector('#app');
+
+const app = Vue.createApp({
     data() {
         return {
             connection: null,
@@ -45,7 +47,7 @@
             });
         },
         sendMessage() {
-            this.connection.invoke('SendMessage', loggedInUserName, loggedInUser, this.newMessage).then(() => {
+            this.connection.invoke('SendMessage', loggedInUser, this.newMessage).then(() => {
                 this.newMessage = '';
             }).catch((err) => {
                 console.error(err);
@@ -56,7 +58,7 @@
                 console.error(err);
             });
         }
-    },
+    }
 });
 
 app.mount('#app');

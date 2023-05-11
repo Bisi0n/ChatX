@@ -2,7 +2,6 @@
 using ChatX.Models;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Scaffolding.Metadata;
 
 namespace ChatX.Hubs
 {
@@ -15,13 +14,14 @@ namespace ChatX.Hubs
             _db = context;
         }
 
-        public async Task SendMessage(string loggedInUserName, int loggedInUser, string messageContent)
+        public async Task SendMessage(int loggedInUser, string messageContent)
         {
+            Account sender = await _db.Accounts.Where(a => a.Id == loggedInUser).SingleAsync();
+
             Message message = new()
             {
                 Content = messageContent,
-                Sender = loggedInUser,
-                SenderName = loggedInUserName,
+                Sender = sender,
                 TimeStamp = DateTime.UtcNow
             };
 
@@ -36,13 +36,17 @@ namespace ChatX.Hubs
         {
             // Delete from db here
             // Counsult with Customer if to keep/delete the message history
+            Message message = await _db.Messages.Where(m => m.Id == id).SingleAsync();
+            message.IsDeleted = true;
+            await _db.SaveChangesAsync();
             
             await Clients.All.SendAsync("DeleteMessage", id);
         }
 
         public async Task LoadPreviousMessages()
         {
-            Message[] messages = await _db.Messages.ToArrayAsync();
+            Message[] messages = await _db.Messages.Include(m => m.Sender)
+                .Where(m => !m.IsDeleted).ToArrayAsync();
 
             await Clients.Caller.SendAsync("ReceiveMessageHistory", messages);
         }
