@@ -1,12 +1,14 @@
 
-﻿const app = Vue.createApp({
+const app = Vue.createApp({
     data() {
         return {
             connection: null,
             connected: false,
             currentUser: null,
             messages: [],
-            newMessage: ''
+            newMessage: '',
+            photos: [],
+            photo: null
         };
     },
     mounted() {
@@ -31,6 +33,10 @@
 
             this.connection.on('DeleteMessage', (id) => {
                 this.messages = this.messages.filter(message => message.id !== id);
+            });
+
+            this.connection.on('RecieveImage', (imageUrl) => {
+                this.image.push(imageUrl);
             });
 
             this.connection.start().then(() => {
@@ -58,6 +64,13 @@
                 console.error(err);
             });
         }
+         uploadImage() {
+            this.connection.invoke('UploadImage', this.uploadedImage).then(() => {
+                this.uploadedImage = '';
+            }).catch((err) => {
+                console.error(err);
+            });
+
     },
 });
 

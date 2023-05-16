@@ -1,11 +1,13 @@
 using ChatX.Data;
 using ChatX.Models;
+using ChatX.Hubs;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using System.Security.Claims;
-using ChatX.Hubs;
+using Microsoft.Extensions.FileProviders;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -110,6 +112,13 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
+app.UseStaticFiles(new StaticFileOptions
+{
+    FileProvider = new PhysicalFileProvider(
+        Path.Combine(builder.Environment.ContentRootPath, builder.Configuration["Uploads:FolderPath"])
+    ),
+    RequestPath = builder.Configuration["Uploads:URLPath"]
+});
 app.UseRouting();
 
 app.UseAuthentication();

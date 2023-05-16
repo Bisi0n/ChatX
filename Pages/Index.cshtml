@@ -1,19 +1,15 @@
 ﻿@page
 @model IndexModel
-@inject ChatX.Data.AccessControl accessControl
+@inject ChatX.Models.AccessControl accessControl
 @{
     ViewData["Title"] = "Home page";
     
 }
 
 
-<<<<<<< Updated upstream
 <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
 <script src="~/js/signalr/dist/browser/signalr.js"></script>
 <script defer src="~/js/chat.js"></script>
-<link src=" ~ /css/site.css" rel="stylesheet">
-<script src="https://twemoji.maxcdn.com/v/latest/twemoji.min.js" crossorigin="anonymous"></script>
-=======
 
 
 <main>
@@ -30,6 +26,14 @@
                 <div class="list-container" v-for="message in messages" :key="message.id">
                     <div id="userMsg" v-if="message.sender === @accessControl.LoggedInAccountID">
                         <p>@accessControl.LoggedInAccountName: {{ message.content }}</p>
+                        @foreach(var url in Model.FileUrls)
+                        {
+                            <img src="@url" style="width:300px">
+                        }
+                        @if (Model.FileUrls.Count == 0)
+                        {
+                            <p>You have not uploaded any photos yet.</p>
+                        }
                         <button class="delete-mark" v-on:click="deleteMessage(message.id)"></button>
                     </div>
                     <div id="msg" v-else>
@@ -42,13 +46,26 @@
                     <button id="sendButton">Send</button>
                 </form>
 
+              
+                 <form id="fileForm" method="post" enctype="multipart/form-data">
+                        
+                    
+                    <div id="upload-container">
+                        
+                        <input type="file" id="fileInput" name="file" />
+                        <button>Upload</button>
+
+                    </div>
+
+                        
+
+                 </form>
+               
+
             </div>
         </div>
     </div>
 </main>
 
-<<<<<<< Updated upstream
 <script>var loggedInUser = @accessControl.LoggedInAccountID</script>
 <script>var loggedInUserName = "@accessControl.LoggedInAccountName"</script>
-
-
