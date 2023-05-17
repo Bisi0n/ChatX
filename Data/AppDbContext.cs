@@ -1,6 +1,5 @@
 ﻿using ChatX.Models;
 using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
 
 namespace ChatX.Data
 {
@@ -8,7 +7,6 @@ namespace ChatX.Data
     {
         public DbSet<Account> Accounts { get; set; }
         public DbSet<Message> Messages { get; set; }
-        public DbSet<Photo> Photos { get; set; }
 
         public AppDbContext(DbContextOptions<AppDbContext> options)
             : base(options)

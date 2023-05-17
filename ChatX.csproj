@@ -8,10 +8,6 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-	  <Compile Remove="Hubs\Chathub.cs" />
-	</ItemGroup>
-
-	<ItemGroup>
 	  <Content Remove="C:\Users\Moham\.nuget\packages\bootstrap\5.2.3\contentFiles\any\any\wwwroot\css\bootstrap-grid.css" />
 	  <Content Remove="C:\Users\Moham\.nuget\packages\bootstrap\5.2.3\contentFiles\any\any\wwwroot\css\bootstrap-grid.css.map" />
 	  <Content Remove="C:\Users\Moham\.nuget\packages\bootstrap\5.2.3\contentFiles\any\any\wwwroot\css\bootstrap-grid.min.css" />
@@ -56,10 +52,6 @@
 	  <Content Remove="C:\Users\Moham\.nuget\packages\bootstrap\5.2.3\contentFiles\any\any\wwwroot\js\bootstrap.js.map" />
 	  <Content Remove="C:\Users\Moham\.nuget\packages\bootstrap\5.2.3\contentFiles\any\any\wwwroot\js\bootstrap.min.js" />
 	  <Content Remove="C:\Users\Moham\.nuget\packages\bootstrap\5.2.3\contentFiles\any\any\wwwroot\js\bootstrap.min.js.map" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <None Include="Hubs\Chathub.cs" />
 	</ItemGroup>
 
 	<ItemGroup>

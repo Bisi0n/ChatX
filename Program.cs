@@ -1,12 +1,11 @@
 using ChatX.Data;
-using ChatX.Models;
 using ChatX.Hubs;
+using ChatX.Models;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using System.Security.Claims;
-using Microsoft.Extensions.FileProviders;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -19,7 +18,7 @@ builder.Services.AddAuthentication(options =>
 .AddCookie(options =>
 {
     // When a user logs in to Google for the first time, create a local account for that user in our database.
-    options.Events.OnValidatePrincipal += async context =>  
+    options.Events.OnValidatePrincipal += async context =>
     {
         var serviceProvider = context.HttpContext.RequestServices;
         using var db = new AppDbContext(serviceProvider.GetRequiredService<DbContextOptions<AppDbContext>>());
@@ -112,13 +111,6 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
-app.UseStaticFiles(new StaticFileOptions
-{
-    FileProvider = new PhysicalFileProvider(
-        Path.Combine(builder.Environment.ContentRootPath, builder.Configuration["Uploads:FolderPath"])
-    ),
-    RequestPath = builder.Configuration["Uploads:URLPath"]
-});
 app.UseRouting();
 
 app.UseAuthentication();
