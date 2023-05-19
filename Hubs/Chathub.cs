@@ -17,7 +17,7 @@ namespace ChatX.Hubs
 
         public async Task SendMessage(int loggedInUser, string messageContent)
         {
-            Account sender = await _db.Accounts.Where(a => a.ID == loggedInUser).SingleAsync();
+            Account sender = await _db.Accounts.Where(a => a.Id == loggedInUser).SingleAsync();
 
             Message message = new()
             {
@@ -54,7 +54,7 @@ namespace ChatX.Hubs
 
         public async Task UserTyping(int loggedInUser, bool isTyping)
         {
-            Account user = await _db.Accounts.Where(u => u.ID == loggedInUser).SingleAsync();
+            Account user = await _db.Accounts.Where(u => u.Id == loggedInUser).SingleAsync();
 
             if (isTyping)
             {
@@ -67,5 +67,16 @@ namespace ChatX.Hubs
 
             await Clients.All.SendAsync("CurrentlyTyping", _usersCurrentlyTyping);
         }
+
+        public async Task AddEmojiReaction(int messageId, string emoji)
+        {
+            var message = await _db.Messages.Where(m => m.Id == messageId).SingleAsync();
+            message.Reaction = emoji;
+            _db.SaveChanges();
+
+            await Clients.All.SendAsync("ReceiveEmojiReaction", messageId, emoji);
+        }
+
+
     }
 }

@@ -22,10 +22,18 @@
                 <div class="list-container" v-for="message in messages" :key="message.id">
                     <div id="userMsg" v-if="message.sender.id === @accessControl.LoggedInAccountID">
                         <p>@accessControl.LoggedInAccountName: {{ message.content }}</p>
-                        <button class="delete-mark" v-on:click="deleteMessage(message.id)"></button>
+                        <button class="delete-mark" v-on:click="deleteMessage(message.Id)"></button>
                     </div>
                     <div id="msg" v-else>
                         <p>{{ message.sender.name }}: {{ message.content }}</p>
+                        @*<div id="reaction">
+                            <button v-on:click="toggelEmojiButton">😄</button>
+
+                            <div v-if="emojiDisplay">
+                                <button v-for="emoji in emojiReactions" :key="emoji" v-on:click="addingEmojiReaction(message.id, emoji)">{{emoji}}</button>
+
+                            </div>
+                        </div>*@
                     </div>
                 </div>
                
