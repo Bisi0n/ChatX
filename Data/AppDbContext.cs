@@ -1,6 +1,5 @@
 ﻿using ChatX.Models;
 using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
 
 namespace ChatX.Data
 {

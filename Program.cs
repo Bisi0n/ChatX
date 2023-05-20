@@ -1,11 +1,12 @@
 using ChatX.Data;
+using ChatX.Hubs;
 using ChatX.Models;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using System.Security.Claims;
-using ChatX.Hubs;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,7 +18,7 @@ builder.Services.AddAuthentication(options =>
 .AddCookie(options =>
 {
     // When a user logs in to Google for the first time, create a local account for that user in our database.
-    options.Events.OnValidatePrincipal += async context =>  
+    options.Events.OnValidatePrincipal += async context =>
     {
         var serviceProvider = context.HttpContext.RequestServices;
         using var db = new AppDbContext(serviceProvider.GetRequiredService<DbContextOptions<AppDbContext>>());

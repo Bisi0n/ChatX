@@ -1,9 +1,8 @@
 ﻿using ChatX.Data;
-using ChatX.Models;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 
-namespace ChatX.Data
+namespace ChatX.Models
 {
     public class AccessControl
     {
@@ -16,7 +15,7 @@ namespace ChatX.Data
             string subject = user.FindFirst(ClaimTypes.NameIdentifier).Value;
             string issuer = user.FindFirst(ClaimTypes.NameIdentifier).Issuer;
 
-            LoggedInAccountID = db.Accounts.Single(p => p.OpenIDIssuer == issuer && p.OpenIDSubject == subject).ID;
+            LoggedInAccountID = db.Accounts.Single(p => p.OpenIDIssuer == issuer && p.OpenIDSubject == subject).Id;
             LoggedInAccountName = user.FindFirst(ClaimTypes.Name).Value;
         }
     }

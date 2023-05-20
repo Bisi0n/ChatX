@@ -1,55 +1,56 @@
 ﻿@page
 @model IndexModel
-@inject ChatX.Data.AccessControl accessControl
+@inject ChatX.Models.AccessControl accessControl
 @{
     ViewData["Title"] = "Home page";
-    
+
 }
 
-
-<<<<<<< Updated upstream
 <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
 <script src="~/js/signalr/dist/browser/signalr.js"></script>
-<script defer src="~/js/chat.js"></script>
-<link src=" ~ /css/site.css" rel="stylesheet">
-<script src="https://twemoji.maxcdn.com/v/latest/twemoji.min.js" crossorigin="anonymous"></script>
-=======
-
 
 <main>
     <div id="app">
         <div class="container">
-
             <div v-if="!connected">
                 <p>Connecting to server...</p>
             </div>
-
             <div v-else>
-
-                <h1>ChatX</h1>
+                <h1>
+                    <img src="~/MicrosoftTeams-image.png" />
+                </h1>
                 <div class="list-container" v-for="message in messages" :key="message.id">
-                    <div id="userMsg" v-if="message.sender === @accessControl.LoggedInAccountID">
+                    <div id="userMsg" v-if="message.sender.id === @accessControl.LoggedInAccountID">
                         <p>@accessControl.LoggedInAccountName: {{ message.content }}</p>
-                        <button class="delete-mark" v-on:click="deleteMessage(message.id)"></button>
+                        <button class="delete-mark" v-on:click="deleteMessage(message.Id)"></button>
                     </div>
                     <div id="msg" v-else>
-                        <p>{{ message.senderName }} {{ message.content }}</p>
+                        <p>{{ message.sender.name }}: {{ message.content }}</p>
+                        @*<div id="reaction">
+                            <button v-on:click="toggelEmojiButton">😄</button>
+
+                            <div v-if="emojiDisplay">
+                                <button v-for="emoji in emojiReactions" :key="emoji" v-on:click="addingEmojiReaction(message.id, emoji)">{{emoji}}</button>
+
+                            </div>
+                        </div>*@
                     </div>
                 </div>
+               
+                <div v-if="usersCurrentlyTyping.length > 0">
+                    <p class="currently-typing" v-if="usersCurrentlyTyping.length === 1">
+                        {{ usersCurrentlyTyping[0].name }} is typing...
+                    </p>
+                    <p class="currently-typing" v-else>Several people are typing...</p>
+                </div>
+
                 <form v-on:submit.prevent="sendMessage">
-                    <input id="messageInput" type="text" v-model="newMessage" />
+                    <input id="messageInput" type="text" v-on:input="currentlyTyping" v-model="newMessage" />
                     <button id="sendButton">Send</button>
                 </form>
-
             </div>
         </div>
     </div>
 </main>
 
-<<<<<<< Updated upstream
 <script>var loggedInUser = @accessControl.LoggedInAccountID</script>
-<script>var loggedInUserName = "@accessControl.LoggedInAccountName"</script>
-=======
-</body>
-
-
