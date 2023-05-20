@@ -11,9 +11,7 @@ const app = Vue.createApp({
             isTyping: false,
             typingTimeout: null,
             usersCurrentlyTyping: [],
-            timeoutDuration: 2500,
-            emojiReactions: ['👍', '❤️', '😄', '😊', '😮', '😢'],
-            emojiDisplay: false
+            timeoutDuration: 2500
         };
     },
     mounted() {
@@ -43,14 +41,6 @@ const app = Vue.createApp({
                 this.usersCurrentlyTyping = usersTyping;
             });
 
-            this.connection.on('ReceiveEmojiReaction', (messageId, emoji) => {
-                const messageIndex = this.messages.findInex(m => m.Id == messageId);
-
-                if (messageIndex > -1) {
-                    this.messages[messageIndex].Reaction = emoji;
-                }
-            });
-
             this.connection.start().then(() => {
                 this.connected = true;
                 this.currentUser = this.connection.connectionId;
@@ -64,7 +54,7 @@ const app = Vue.createApp({
                 console.error(err);
             });
         },
-        sendMessage(loggedInUser) {
+        sendMessage() {
             this.connection.invoke('SendMessage', loggedInUser, this.newMessage).then(() => {
                 this.newMessage = '';
             }).catch((err) => {
@@ -97,16 +87,6 @@ const app = Vue.createApp({
                     .catch(err => console.error(err));
             }, this.timeoutDuration); // Adjust the timeout duration as needed
         },
-
-        addingEmojiReaction(messageId, emoji) {
-            this.connection.invoke('AddEmojiReaction', messageId, emoji).catch((err) => {
-                console.error(err);
-            });
-        },
-
-        toggelEmojiButton() {
-            this.emojiDisplay = !this.emojiDisplay;
-        }
     }
 });
 

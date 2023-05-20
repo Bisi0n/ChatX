@@ -4,8 +4,6 @@
 @{
     ViewData["Title"] = "Home page";
 
-}
-
 <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
 <script src="~/js/signalr/dist/browser/signalr.js"></script>
 
@@ -26,14 +24,6 @@
                     </div>
                     <div id="msg" v-else>
                         <p>{{ message.sender.name }}: {{ message.content }}</p>
-                        @*<div id="reaction">
-                            <button v-on:click="toggelEmojiButton">😄</button>
-
-                            <div v-if="emojiDisplay">
-                                <button v-for="emoji in emojiReactions" :key="emoji" v-on:click="addingEmojiReaction(message.id, emoji)">{{emoji}}</button>
-
-                            </div>
-                        </div>*@
                     </div>
                 </div>
                
@@ -48,6 +38,12 @@
                     <input id="messageInput" type="text" v-on:input="currentlyTyping" v-model="newMessage" />
                     <button id="sendButton">Send</button>
                 </form>
+                <div v-if="usersCurrentlyTyping.length > 0">
+                    <p class="currently-typing" v-if="usersCurrentlyTyping.length === 1">
+                        {{ usersCurrentlyTyping[0].name }} is typing...
+                        </p>
+                    <p class="currently-typing" v-else>Several people are typing...</p>
+                </div>
             </div>
         </div>
     </div>

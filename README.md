@@ -1,3 +1,3 @@
 # ChatX
 
-A simplified Dicord clone
+A simplified Discord clone

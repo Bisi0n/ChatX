@@ -40,7 +40,7 @@ namespace ChatX.Hubs
             Message message = await _db.Messages.Where(m => m.Id == id).SingleAsync();
             message.IsDeleted = true;
             await _db.SaveChangesAsync();
-
+            
             await Clients.All.SendAsync("DeleteMessage", id);
         }
 
@@ -65,18 +65,7 @@ namespace ChatX.Hubs
                 _usersCurrentlyTyping.Remove(user);
             }
 
-            await Clients.All.SendAsync("CurrentlyTyping", _usersCurrentlyTyping);
+             await Clients.All.SendAsync("CurrentlyTyping", _usersCurrentlyTyping);
         }
-
-        public async Task AddEmojiReaction(int messageId, string emoji)
-        {
-            var message = await _db.Messages.Where(m => m.Id == messageId).SingleAsync();
-            message.Reaction = emoji;
-            _db.SaveChanges();
-
-            await Clients.All.SendAsync("ReceiveEmojiReaction", messageId, emoji);
-        }
-
-
     }
 }
