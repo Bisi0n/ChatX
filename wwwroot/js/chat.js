@@ -64,7 +64,7 @@ const app = Vue.createApp({
                 console.error(err);
             });
         },
-        sendMessage(loggedInUser) {
+        sendMessage() {
             this.connection.invoke('SendMessage', loggedInUser, this.newMessage).then(() => {
                 this.newMessage = '';
             }).catch((err) => {
