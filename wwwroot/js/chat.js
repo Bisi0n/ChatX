@@ -6,6 +6,7 @@ const app = Vue.createApp({
             connection: null,
             connected: false,
             currentUser: null,
+            chatRooms: [],
             messages: [],
             newMessage: '',
             isTyping: false,
