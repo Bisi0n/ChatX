@@ -7,6 +7,5 @@
         public string Content { get; set; }
         public DateTime TimeStamp { get; set; }
         public bool IsDeleted { get; set; }
-        public string Reaction { get; set; }
     }
 }

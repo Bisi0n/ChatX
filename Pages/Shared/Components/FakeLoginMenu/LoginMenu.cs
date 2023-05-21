@@ -1,5 +1,4 @@
-﻿using ChatX.Models;
-using ChatX.Data;
+﻿using ChatX.Data;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 

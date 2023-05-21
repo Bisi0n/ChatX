@@ -1,8 +1,9 @@
 ﻿using ChatX.Data;
+using ChatX.Models;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 
-namespace ChatX.Models
+namespace ChatX.Data
 {
     public class AccessControl
     {

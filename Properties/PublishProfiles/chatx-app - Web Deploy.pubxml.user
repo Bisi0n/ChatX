@@ -7,12 +7,12 @@ by editing this MSBuild file. In order to learn more about this please visit htt
   <PropertyGroup>
     <TimeStampOfAssociatedLegacyPublishXmlFile />
     <EncryptedPassword>AQAAANCMnd8BFdERjHoAwE/Cl+sBAAAA4S9ffsPbvkKrNccQ1aC/7gAAAAACAAAAAAAQZgAAAAEAACAAAABa+0MgVcSIzYaRWhUqG2nfE59IJFejyXO4n6FdBmI0zQAAAAAOgAAAAAIAACAAAACQ5w6RgGKhlEePSvha7BnpGxaGabuQC3uNjwZAq9QRt4AAAAAh5ilG6KE/2JU/aNmGWAvdPj/zOKTOH4RMj6+A2CnOntYhSTknmJLprBqGQZMIzKMLMreC6IGXOb9e5pwQRh0PehEhhvtlMoNdo/1mFjGAxkvrbMLIpSV1O8i3tPUXIIpOv4nNJcqMps90HDz8wboO16nEq37IDODmrBWRbw4iekAAAACEbchkFlIUm14/J1MHEW6ayWLU/y9fOKqlrfDXWMAmmiHyObgmVEUEXeJT7PVOXTmk3bGzpN1ppG6QHFILUPu1</EncryptedPassword>
-    <History>True|2023-05-10T15:35:02.3020799Z;True|2023-05-10T17:23:59.8755797+02:00;True|2023-05-10T17:12:29.4164501+02:00;</History>
+    <History>True|2023-05-11T14:56:43.8377258Z;False|2023-05-11T16:52:00.3004117+02:00;False|2023-05-11T16:47:29.7185907+02:00;True|2023-05-10T20:11:11.1402062+02:00;True|2023-05-10T20:03:53.7375762+02:00;True|2023-05-10T19:52:43.7955957+02:00;False|2023-05-10T19:49:11.4645765+02:00;True|2023-05-10T19:40:17.7516174+02:00;False|2023-05-10T19:36:54.8191770+02:00;False|2023-05-10T19:31:38.7832365+02:00;True|2023-05-10T17:35:02.3020799+02:00;True|2023-05-10T17:23:59.8755797+02:00;True|2023-05-10T17:12:29.4164501+02:00;</History>
     <LastFailureDetails />
   </PropertyGroup>
   <ItemGroup>
     <EFMigrations Include="ChatX.Data.AppDbContext">
-      <Value>Data Source=tcp:chatx-app.database.windows.net,1433%3bInitial Catalog=chatx-app%3bUser Id=chatxadmin%40chatx-app%3bPassword=Chatxisbest123</Value>
+      <Value>Data Source=tcp:chatx-app.database.windows.net,1433%3bInitial Catalog=chatx-db%3bUser Id=chatxadmin%40chatx-app%3bPassword=Chatxisbest123</Value>
     </EFMigrations>
   </ItemGroup>
 </Project>
