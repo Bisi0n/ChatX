@@ -1,9 +1,7 @@
 ﻿using ChatX.Data;
 using ChatX.Models;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Azure.SignalR.Protocol;
 using Microsoft.EntityFrameworkCore;
 
 namespace ChatX.Controllers
