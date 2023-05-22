@@ -26,17 +26,21 @@
                         <p>{{ message.sender.name }}: {{ message.content }}</p>
                     </div>
                 </div>
-                <form v-on:submit.prevent="sendMessage">
-                    <input id="messageInput" type="text" v-on:input="currentlyTyping" v-model="newMessage" />
-                    <button id="sendButton">Send</button>
-                </form>
                 <div v-if="usersCurrentlyTyping.length > 0">
                     <p class="currently-typing" v-if="usersCurrentlyTyping.length === 1">
                         {{ usersCurrentlyTyping[0].name }} is typing...
-                        </p>
+                    </p>
                     <p class="currently-typing" v-else>Several people are typing...</p>
                 </div>
+                <div id="input-container">
+                    <form v-on:submit.prevent="sendMessage">
+                        <input id="messageInput" type="text" v-on:input="currentlyTyping" v-model="newMessage"/>
+                        <button id="sendButton">Send</button>
+                    </form>
+                </div>
+                
             </div>
+            
         </div>
     </div>
 </main>
