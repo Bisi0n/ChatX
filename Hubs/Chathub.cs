@@ -46,7 +46,9 @@ namespace ChatX.Hubs
 
         public async Task LoadPreviousMessages()
         {
-            Message[] messages = await _db.Messages.Include(m => m.Sender)
+            Message[] messages = await _db.Messages
+                .Include(m => m.Sender)
+                .Include(m => m.Reactions)
                 .Where(m => !m.IsDeleted).ToArrayAsync();
 
             await Clients.Caller.SendAsync("ReceiveMessageHistory", messages);
@@ -67,5 +69,23 @@ namespace ChatX.Hubs
 
              await Clients.All.SendAsync("CurrentlyTyping", _usersCurrentlyTyping);
         }
+
+        public async Task AddEmojiReaction( int senderId ,int messageId, string emoji)
+        {
+            Message message = await _db.Messages.Where(m => m.Id == messageId).SingleAsync();
+            Account senderAccount = await _db.Accounts.Where(a => a.Id == senderId).SingleAsync();
+            Emoji newEmoji = new()
+            {
+                Value = emoji,
+                Sender = senderAccount,
+            };
+
+            message.Reactions.Add(newEmoji);
+            _db.SaveChanges();
+
+            await LoadPreviousMessages();
+            //await Clients.All.SendAsync("ReceiveEmojiReaction", message);
+        }
+
     }
 }

@@ -16,14 +16,37 @@
                 <p>Connecting to server...</p>
             </div>
             <div v-else>
-                <h1>ChatX</h1>
+                <h1>
+                    <img id="imgId" src="~/MicrosoftTeams-image.png" />
+                </h1>
                 <div class="list-container" v-for="message in messages" :key="message.id">
                     <div id="userMsg" v-if="message.sender.id === @accessControl.LoggedInAccountID">
+                        
+                           
+                        <div v-for="reaction in message.reactions">
+                            <button>{{reaction.sender.name}} {{reaction.value}}</button>
+                        </div>
+
                         <p>@accessControl.LoggedInAccountName: {{ message.content }}</p>
                         <button class="delete-mark" v-on:click="deleteMessage(message.id)"></button>
                     </div>
                     <div id="msg" v-else>
-                        <p>{{ message.sender.name }}: {{ message.content }}</p>
+
+                        <div v-for="emoji in message.reactions">
+                            <button>{{emoji.sender.name}} {{emoji.value}}</button>
+                        </div>
+                           
+                       
+                        <p msgText>{{ message.sender.name }}: {{ message.content }}</p>
+
+                        <div id="reaction">
+                            <button v-on:click="toggelEmojiButton">X</button>
+
+                            <div v-if="emojiDisplay">
+                                <button v-for="emoji in emojiReactions" :key="emoji" v-on:click="addingEmojiReaction(@accessControl.LoggedInAccountID, message.id, emoji)">{{emoji}}</button>
+
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <form v-on:submit.prevent="sendMessage">
