@@ -2,23 +2,32 @@
     box-sizing: border-box;
     margin: 0;
     padding: 0;
-    max-width: 50rem;
+    
     margin-left: auto;
     margin-right: auto;
 }
 
 h1 {
     text-align: center;
-    margin-top: 5%;
+    margin-top: 0;
     color: goldenrod;
 }
 
+body {
+    background-color: black;
+}
+
+img {
+    width: 40%;
+    margin-top: 0;
+}
+
 .container {
-    background-color: rgb(32, 31, 31);
     text-align: center;
     border-radius: 10px;
     margin-top: 5%;
     padding: 10px;
+    max-width: 60rem;
 }
 
 .input-container {
@@ -33,14 +42,18 @@ h1 {
     padding: 5px;
     background-color: rgb(159, 156, 156);
     border-radius: 5px;
+    margin-left: 5%;
+    padding: 5px;
+    font-size: large;
 }
 
 #messageInput {
     background-color: rgb(159, 156, 156);
     padding: 5px;
     font-size: large;
-    width: 25rem;
+    width: 50%;
     border-radius: 5px;
+    
 }
 
 .msgLabel {
@@ -80,6 +93,7 @@ li:hover .delete-mark {
     background-color: rgb(159, 156, 156);
     text-align: start;
     list-style: none;
+    margin-left: 20%;
 }
 
 #msg {
@@ -89,6 +103,7 @@ li:hover .delete-mark {
     background-color: rgb(193, 165, 3);
     text-align: start;
     list-style: none;
+    margin-right: 20%
 }
 
 /*Fix this later*/

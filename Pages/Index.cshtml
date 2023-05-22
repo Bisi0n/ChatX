@@ -16,7 +16,7 @@
                 <p>Connecting to server...</p>
             </div>
             <div v-else>
-                <h1>ChatX</h1>
+                <h1><img src="/js/MicrosoftTeams-image.png"></img></h1>
                 <div class="list-container" v-for="message in messages" :key="message.id">
                     <div id="userMsg" v-if="message.sender.id === @accessControl.LoggedInAccountID">
                         <p>@accessControl.LoggedInAccountName: {{ message.content }}</p>
