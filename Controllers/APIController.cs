@@ -7,29 +7,32 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ChatX.Controllers
 {
-    [Route("/chatX")]
+    [Route("/api")]
     [AllowAnonymous]
     [ApiController]
     public class APIController : ControllerBase
     {
-        private readonly AppDbContext database;
+        private readonly AppDbContext _db;
 
         public APIController(AppDbContext database)
         {
-            this.database = database;
+            _db = database;
         }
 
         // Get last five messages
-        [HttpGet("chatX/api")]
+        [HttpGet]
         public ActionResult<List<Message>> GetLatestMessages()
         {
-            var allMessage = database.Messages.ToList();
-            var lastFive = allMessage.Take(5);
+            var lastFive = _db.Messages.Include(m => m.Sender)
+                .Where(m => !m.IsDeleted)
+                .OrderByDescending(m => m.Id)
+                .Take(5);
 
-            if(lastFive == null || !lastFive.Any())
+            if (!lastFive.Any())
             {
                 return NotFound();
             }
+
             return lastFive.ToList();
         }
     }
