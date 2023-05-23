@@ -19,21 +19,24 @@ namespace ChatX.Controllers
             _db = database;
         }
 
-        // Get last five messages
-        [HttpGet]
-        public ActionResult<List<Message>> GetLatestMessages()
+        // Get latest messages
+        [HttpGet("latest/{amount:int?}")]
+        public ActionResult<List<Message>> GetLatestMessages(int? amount = null)
         {
-            var lastFive = _db.Messages.Include(m => m.Sender)
+            // If no amount is passed in, return 5 latest messages.
+            int messageCount = amount ?? 5;
+
+            var lastMessages = _db.Messages.Include(m => m.Sender)
                 .Where(m => !m.IsDeleted)
                 .OrderByDescending(m => m.Id)
-                .Take(5);
+                .Take(messageCount);
 
-            if (!lastFive.Any())
+            if (!lastMessages.Any())
             {
                 return NotFound();
             }
 
-            return lastFive.ToList();
+            return lastMessages.ToList();
         }
     }
 }
