@@ -1,0 +1,35 @@
+﻿@page
+@model ChatX.Pages.ChatModel
+@inject ChatX.Data.AccessControl accessControl
+@{
+}
+
+<h1><img src="~/js/MicrosoftTeams-image.png" /></h1>
+<div class="container">
+	<div v-if="!connected">
+		<p>Connecting to server...</p>
+	</div>
+	<div v-else>
+		<div class="list-container" v-for="message in messages" :key="message.id">
+			<div id="userMsg" v-if="message.sender.id === @accessControl.LoggedInAccountID">
+				<p>@accessControl.LoggedInAccountName: {{ message.content }}</p>
+				<button class="delete-mark" v-on:click="deleteMessage(message.id)"></button>
+			</div>
+			<div id="msg" v-else>
+				<p>{{ message.sender.name }}: {{ message.content }}</p>
+			</div>
+		</div>
+	</div>
+		<form v-on:submit.prevent="sendMessage">
+			<input id="messageInput" type="text" v-on:input="currentlyTyping" v-model="newMessage" />
+			<button id="sendButton">Send</button>
+		</form>
+		<div v-if="usersCurrentlyTyping.length > 0">
+			<p class="currently-typing" v-if="usersCurrentlyTyping.length === 1">
+				{{ usersCurrentlyTyping[0].name }} is typing...
+			</p>
+			<p class="currently-typing" v-else>Several people are typing...</p>
+		</div>
+</div>
+
+<script>var loggedInUser = @accessControl.LoggedInAccountID</script>

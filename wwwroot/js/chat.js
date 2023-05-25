@@ -42,16 +42,26 @@ const app = Vue.createApp({
                 this.usersCurrentlyTyping = usersTyping;
             });
 
+            this.connection.on('ReceiveChatRooms', (chatRooms) => {
+                this.chatRooms = chatRooms;
+            });
+
             this.connection.start().then(() => {
                 this.connected = true;
                 this.currentUser = this.connection.connectionId;
-                this.loadPreviousMessages();
+                //this.loadPreviousMessages();
+                this.loadChatRooms();
             }).catch((err) => {
                 console.error(err);
             });
         },
         loadPreviousMessages() {
             this.connection.invoke('LoadPreviousMessages').catch((err) => {
+                console.error(err);
+            });
+        },
+        loadChatRooms() {
+            this.connection.invoke('LoadChatRooms').catch((err) => {
                 console.error(err);
             });
         },

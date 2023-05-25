@@ -11,10 +11,7 @@ h1 {
     text-align: center;
     margin-top: 5%;
     color: goldenrod;
-}
-
-h2 {
-    color: whitesmoke;
+    margin-bottom: 10px;
 }
 
 .container {

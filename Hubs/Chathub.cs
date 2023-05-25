@@ -46,7 +46,7 @@ namespace ChatX.Hubs
             await Clients.All.SendAsync("DeleteMessage", id);
         }
 
-        public async Task LoadPreviousMessages(string chatRoom)
+        public async Task LoadPreviousMessages()
         {
             Message[] messages = await _db.Messages.Include(m => m.Sender)
                 .Where(m => !m.IsDeleted).ToArrayAsync();
@@ -70,7 +70,14 @@ namespace ChatX.Hubs
              await Clients.All.SendAsync("CurrentlyTyping", _usersCurrentlyTyping);
         }
 
-        public async Task CreateChatRoom(int loggedInUser, string chatRoomName)
+		public async Task LoadChatRooms()
+		{
+            ChatRoom[] rooms = await _db.ChatRooms.Include(r => r.Owner).ToArrayAsync();
+
+			await Clients.Caller.SendAsync("ReceiveChatRooms", rooms);
+		}
+
+		public async Task CreateChatRoom(int loggedInUser, string chatRoomName)
         {
             Account owner = await _db.Accounts.Where(a => a.Id == loggedInUser).SingleAsync();
 
