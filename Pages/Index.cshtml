@@ -7,6 +7,13 @@
 }
 
 <h1><img src="~/js/MicrosoftTeams-image.png" /></h1>
+
+<form v-on:submit="createChatRoom">
+    <label>Chatroom Name</label>
+    <input type="text" v-model="newChatRoom" />
+    <button>Create</button>
+</form>
+
 <h2>Available Chatrooms</h2>
 
 <ul>

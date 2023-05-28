@@ -6,6 +6,7 @@ const app = Vue.createApp({
             connection: null,
             connected: false,
             currentUser: null,
+            newChatRoom: '',
             joinedRoomId: null,
             messages: [],
             newMessage: '',
@@ -42,36 +43,41 @@ const app = Vue.createApp({
                 this.usersCurrentlyTyping = usersTyping;
             });
 
-            this.connection.start().then(() => {
-                this.connected = true;
-                this.currentUser = this.connection.connectionId;
-                this.loadChatRooms();
-            }).catch((err) => {
-                console.error(err);
-            });
+            this.connection.start()
+                .then(() => {
+                    this.connected = true;
+                    this.currentUser = this.connection.connectionId;
+                    this.loadChatRooms();
+                }).catch((err) => {
+                    console.error(err);
+                });
         },
         loadPreviousMessages() {
             this.messages = [];
-            this.connection.invoke('LoadPreviousMessages', this.joinedRoomId).catch((err) => {
-                console.error(err);
-            });
+            this.connection.invoke('LoadPreviousMessages', this.joinedRoomId)
+                .catch((err) => {
+                    console.error(err);
+                });
         },
         loadChatRooms() {
-            this.connection.invoke('LoadChatRooms').catch((err) => {
-                console.error(err);
-            });
+            this.connection.invoke('LoadChatRooms')
+                .catch((err) => {
+                    console.error(err);
+                });
         },
         sendMessage() {
-            this.connection.invoke('SendMessage', loggedInUser, this.newMessage, this.joinedRoomId).then(() => {
-                this.newMessage = '';
-            }).catch((err) => {
-                console.error(err);
-            });
+            this.connection.invoke('SendMessage', loggedInUser, this.newMessage, this.joinedRoomId)
+                .then(() => {
+                    this.newMessage = '';
+                }).catch((err) => {
+                    console.error(err);
+                });
         },
         deleteMessage(id) {
-            this.connection.invoke('DeleteMessage', id).catch((err) => {
-                console.error(err);
-            });
+            this.connection.invoke('DeleteMessage', id)
+                .catch((err) => {
+                    console.error(err);
+                });
         },
         currentlyTyping() {
             clearTimeout(this.typingTimeout);
@@ -93,6 +99,15 @@ const app = Vue.createApp({
                     })
                     .catch(err => console.error(err));
             }, this.timeoutDuration); // Adjust the timeout duration as needed
+        },
+        createChatRoom() {
+            this.connection.invoke('CreateChatRoom', loggedInUser, this.newChatRoom)
+                .then(() => {
+                    this.newChatRoom = '';
+                })
+                .catch((err) => {
+                    console.log(err);
+                });
         },
         joinChatRoom(roomId) {
             if (this.joinedRoomId !== null) {
