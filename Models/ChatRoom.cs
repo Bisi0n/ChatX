@@ -4,8 +4,9 @@
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public int OwnerId { get; set; }
-        public Account Owner { get; set; }
-        public List<Account> Users { get; set; }
+        public int CreatedById { get; set; }
+        public Account CreatedBy { get; set; }
+
+        public string GetRoomIdentifier() => $"{Id}{Name}"; 
     }
 }

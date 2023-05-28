@@ -15,7 +15,8 @@ namespace ChatX.Pages
         public IndexModel(AppDbContext database)
         {
             _db = database;
-            ChatRooms = _db.ChatRooms.Include(r => r.Owner).ToList();
+            ChatRooms = _db.ChatRooms
+                .Include(r => r.CreatedBy).ToList();
         }
 
         public void OnGet()

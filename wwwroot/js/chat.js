@@ -6,7 +6,7 @@ const app = Vue.createApp({
             connection: null,
             connected: false,
             currentUser: null,
-            chatRooms: [],
+            joinedRoomId: null,
             messages: [],
             newMessage: '',
             isTyping: false,
@@ -42,21 +42,17 @@ const app = Vue.createApp({
                 this.usersCurrentlyTyping = usersTyping;
             });
 
-            this.connection.on('ReceiveChatRooms', (chatRooms) => {
-                this.chatRooms = chatRooms;
-            });
-
             this.connection.start().then(() => {
                 this.connected = true;
                 this.currentUser = this.connection.connectionId;
-                //this.loadPreviousMessages();
                 this.loadChatRooms();
             }).catch((err) => {
                 console.error(err);
             });
         },
         loadPreviousMessages() {
-            this.connection.invoke('LoadPreviousMessages').catch((err) => {
+            this.messages = [];
+            this.connection.invoke('LoadPreviousMessages', this.joinedRoomId).catch((err) => {
                 console.error(err);
             });
         },
@@ -66,7 +62,7 @@ const app = Vue.createApp({
             });
         },
         sendMessage() {
-            this.connection.invoke('SendMessage', loggedInUser, this.newMessage).then(() => {
+            this.connection.invoke('SendMessage', loggedInUser, this.newMessage, this.joinedRoomId).then(() => {
                 this.newMessage = '';
             }).catch((err) => {
                 console.error(err);
@@ -81,7 +77,7 @@ const app = Vue.createApp({
             clearTimeout(this.typingTimeout);
 
             if (!this.isTyping) {
-                this.connection.send('UserTyping', loggedInUser, true)
+                this.connection.send('UserTyping', loggedInUser, true, this.joinedRoomId)
                     .then(() => {
                         this.isTyping = true;
                     })
@@ -91,13 +87,45 @@ const app = Vue.createApp({
             // Set a timeout to detect when the user stops typing
             this.typingTimeout = setTimeout(() => {
                 // Send typing indicator to the server indicating the user stopped typing
-                this.connection.send('UserTyping', loggedInUser, false)
+                this.connection.send('UserTyping', loggedInUser, false, this.joinedRoomId)
                     .then(() => {
                         this.isTyping = false;
                     })
                     .catch(err => console.error(err));
             }, this.timeoutDuration); // Adjust the timeout duration as needed
         },
+        joinChatRoom(roomId) {
+            if (this.joinedRoomId !== null) {
+                this.leaveChatRoom();
+            }
+
+            this.connection.invoke('JoinChatRoom', loggedInUser, roomId)
+                .then(() => {
+                    this.joinedRoomId = roomId;
+                    this.loadPreviousMessages();
+                    this.announceActivity(true);
+                })
+                .catch((err) => {
+                    console.log(err);
+                });
+        },
+        leaveChatRoom() {
+            this.connection.invoke('LeaveChatRoom', this.joinedRoomId)
+                .then(() => {
+                    this.announceActivity(false);
+                    this.joinedRoomId = null;
+                    this.messages = [];
+                })
+                .catch((err) => {
+                    console.log(err);
+                })
+        },
+        announceActivity(joined) {
+            this.connection.invoke('AnnounceActivity', loggedInUser, this.joinedRoomId, joined)
+                .catch((err) => {
+                    console.log(err);
+                });
+        }
     }
 });
 
