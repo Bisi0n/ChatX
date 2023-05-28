@@ -2,19 +2,19 @@
 using ChatX.Models;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
-using System.Xml.Linq;
 
 namespace ChatX.Hubs
 {
     public class Chathub : Hub
     {
         private readonly AppDbContext _db;
-        private List<Account> _usersCurrentlyTyping = new();
+        private Dictionary<string, List<Account>> _usersCurrentlyTyping;
         private readonly Account _systemAccount;
 
         public Chathub(AppDbContext context)
         {
             _db = context;
+            _usersCurrentlyTyping = new();
             _systemAccount = new()
             {
                 Id = -1,
@@ -66,16 +66,28 @@ namespace ChatX.Hubs
             ChatRoom chatRoom = await GetChatRoomAsync(roomId);
             Account user = await GetUserAsync(loggedInUser);
 
+            string roomIdentifier = chatRoom.GetRoomIdentifier();
+
+            if (!_usersCurrentlyTyping.ContainsKey(roomIdentifier))
+            {
+                _usersCurrentlyTyping[roomIdentifier] = new();
+            }
+
+            List<Account> usersTyping = _usersCurrentlyTyping[roomIdentifier];
+
             if (isTyping)
             {
-                _usersCurrentlyTyping.Add(user);
+                if (!usersTyping.Contains(user))
+                {
+                    usersTyping.Add(user);
+                }
             }
             else
             {
-                _usersCurrentlyTyping.Remove(user);
+                usersTyping.Remove(user);
             }
 
-             await Clients.Group(chatRoom.GetRoomIdentifier()).SendAsync("CurrentlyTyping", _usersCurrentlyTyping);
+             await Clients.Group(chatRoom.GetRoomIdentifier()).SendAsync("CurrentlyTyping", usersTyping);
         }
 
 		public async Task LoadChatRooms()
