@@ -6,8 +6,7 @@
     ViewData["Title"] = "ChatX";
 }
 
-<h1><img src="~/js/MicrosoftTeams-image.png" /></h1>
-<form v-on:submit="createChatRoom">
+@*<form v-on:submit="createChatRoom">
     <label>Chatroom Name</label>
     <input type="text" v-model="newChatRoom" />
     <button>Create</button>
@@ -20,13 +19,14 @@
     <li>
         <button v-on:click="joinChatRoom(@room.Id)">@room.Name</button>
     </li>
-}
+}*@
 
 <div class="container">
     <div v-if="!connected">
         <p>Connecting to server...</p>
     </div>
     <div v-else>
+        <h1><img src="~/js/MicrosoftTeams-image.png" /></h1>    
         <div class="list-container" v-for="message in messages" :key="message.id">
             <div id="userMsg" v-if="message.sender.id === @accessControl.LoggedInAccountID">
                 <p>@accessControl.LoggedInAccountName: {{ message.content }}</p>
