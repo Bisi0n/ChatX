@@ -8,7 +8,7 @@ namespace ChatX.Data
     {
         public DbSet<Account> Accounts { get; set; }
         public DbSet<Message> Messages { get; set; }
-        public DbSet<Emoji> Emojis { get; set; }
+        public DbSet<Reaction> Reactions { get; set; }
 
         public AppDbContext(DbContextOptions<AppDbContext> options)
             : base(options)

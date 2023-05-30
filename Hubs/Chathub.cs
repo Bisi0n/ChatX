@@ -51,7 +51,7 @@ namespace ChatX.Hubs
                 .Include(m => m.Reactions)
                 .Where(m => !m.IsDeleted).ToArrayAsync();
 
-            await Clients.Caller.SendAsync("ReceiveMessageHistory", messages);
+            await Clients.All.SendAsync("ReceiveMessageHistory", messages);
         }
 
         public async Task UserTyping(int loggedInUser, bool isTyping)
@@ -74,7 +74,8 @@ namespace ChatX.Hubs
         {
             Message message = await _db.Messages.Where(m => m.Id == messageId).SingleAsync();
             Account senderAccount = await _db.Accounts.Where(a => a.Id == senderId).SingleAsync();
-            Emoji newEmoji = new()
+
+            Reaction newEmoji = new()
             {
                 Value = emoji,
                 Sender = senderAccount,

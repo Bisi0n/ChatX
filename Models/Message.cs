@@ -7,6 +7,6 @@
         public string Content { get; set; }
         public DateTime TimeStamp { get; set; }
         public bool IsDeleted { get; set; }
-        public List<Emoji>? Reactions { get; set; } = new List<Emoji>();
+        public List<Reaction>? Reactions { get; set; } = new List<Reaction>();
     }
 }
