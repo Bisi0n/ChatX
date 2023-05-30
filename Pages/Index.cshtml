@@ -7,7 +7,6 @@
 }
 
 <h1><img src="~/js/MicrosoftTeams-image.png" /></h1>
-
 <form v-on:submit="createChatRoom">
     <label>Chatroom Name</label>
     <input type="text" v-model="newChatRoom" />
@@ -16,38 +15,50 @@
 
 <h2>Available Chatrooms</h2>
 
-<ul>
-    @foreach (var room in Model.ChatRooms)
-    {
-        <li>
-            <button v-on:click="joinChatRoom(@room.Id)">@room.Name</button>
-        </li>
-    }
+@foreach (var room in Model.ChatRooms)
+{
+    <li>
+        <button v-on:click="joinChatRoom(@room.Id)">@room.Name</button>
+    </li>
+}
 
-    <div class="container">
-        <div v-if="!connected">
-            <p>Connecting to server...</p>
-        </div>
-        <div v-else>
-            <div class="list-container" v-for="message in messages" :key="message.id">
-                <div id="userMsg" v-if="message.sender.id === @accessControl.LoggedInAccountID">
-                    <p>@accessControl.LoggedInAccountName: {{ message.content }}</p>
-                    <button class="delete-mark" v-on:click="deleteMessage(message.id)"></button>
-                </div>
-                <div id="msg" v-else>
-                    <p>{{ message.sender.name }}: {{ message.content }}</p>
-                </div>
+<div class="container">
+    <div v-if="!connected">
+        <p>Connecting to server...</p>
+    </div>
+    <div v-else>
+        <div class="list-container" v-for="message in messages" :key="message.id">
+            <div id="userMsg" v-if="message.sender.id === @accessControl.LoggedInAccountID">
+                <p>@accessControl.LoggedInAccountName: {{ message.content }}</p>
+                <button class="delete-mark" v-on:click="deleteMessage(message.id)"></button>
+            </div>
+            <div id="msg" v-else>
+                <p>{{ message.sender.name }}: {{ message.content }}</p>
             </div>
         </div>
-        <form v-on:submit.prevent="sendMessage">
-            <input id="messageInput" type="text" v-on:input="currentlyTyping" v-model="newMessage" />
-            <button id="sendButton">Send</button>
-        </form>
         <div v-if="usersCurrentlyTyping.length > 0">
             <p class="currently-typing" v-if="usersCurrentlyTyping.length === 1">
                 {{ usersCurrentlyTyping[0].name }} is typing...
             </p>
             <p class="currently-typing" v-else>Several people are typing...</p>
         </div>
+        <div id="input-container">
+            <form v-on:submit.prevent="sendMessage">
+                <input id="messageInput" type="text" v-on:input="currentlyTyping" v-model="newMessage"/>
+                <button id="sendButton">Send</button>
+            </form>
+        </div>
+        
     </div>
-</ul>
+    
+</div>
+<form v-on:submit.prevent="sendMessage">
+    <input id="messageInput" type="text" v-on:input="currentlyTyping" v-model="newMessage" />
+    <button id="sendButton">Send</button>
+</form>
+<div v-if="usersCurrentlyTyping.length > 0">
+    <p class="currently-typing" v-if="usersCurrentlyTyping.length === 1">
+        {{ usersCurrentlyTyping[0].name }} is typing...
+    </p>
+    <p class="currently-typing" v-else>Several people are typing...</p>
+</div>

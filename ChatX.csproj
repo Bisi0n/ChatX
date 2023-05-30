@@ -21,4 +21,14 @@
 		<PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="6.0.16" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <Content Update="wwwroot\js\MicrosoftTeams-image.png">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </Content>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Folder Include="wwwroot\js\img\" />
+	</ItemGroup>
+
 </Project>
