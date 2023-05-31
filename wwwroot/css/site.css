@@ -1,15 +1,27 @@
-﻿* {
+﻿@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&display=swap');
+
+* {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
-    
     margin-left: auto;
     margin-right: auto;
+    font-family: 'Open Sans', sans-serif;
+    font-weight: normal;
 }
+
+.username {
+    font-weight: bold;
+}
+
 
 h1 {
     text-align: center;
     margin-top: 0;
+}
+
+h2 {
+    color: rgb(224, 199, 88);
 }
 
 body {
@@ -98,7 +110,7 @@ img {
     border-radius: 5px;
     padding: 10px;
     margin-bottom: 8px;
-    background-color: rgb(193, 165, 3);
+    background-color: rgb(224, 199, 88);
     text-align: start;
     list-style: none;
     margin-right: 20%
