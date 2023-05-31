@@ -6,8 +6,6 @@
     ViewData["Title"] = "ChatX";
 }
 
-
-
 <div class="container">
     <h1><img src="~/js/MicrosoftTeams-image.png" /></h1>
     <div v-if="!connected">
@@ -18,8 +16,10 @@
         <ul>
             @foreach (var room in Model.ChatRooms)
             {
-                <li>
-                    <button v-on:click="joinChatRoom(@room.Id)">@room.Name</button>
+                <li class="chat-room">
+                    <p class="room-name">@room.Name</p>
+                    <p class="created-by">Created by @room.CreatedBy.Name</p>
+                    <button v-on:click="joinChatRoom(@room.Id)">Join</button>
                 </li>
             }
         </ul>
@@ -48,8 +48,9 @@
         <div id="input-container">
             <form v-on:submit.prevent="sendMessage">
                 <input id="messageInput" type="text" v-on:input="currentlyTyping" v-model="newMessage" />
-                <button id="sendButton">Send</button>
+                <button class="buttons">Send</button>
             </form>
+            <button id="leave-button" class="buttons">Leave Room</button>
         </div>
     </div>
 </div>

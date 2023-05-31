@@ -66,12 +66,14 @@ const app = Vue.createApp({
                 });
         },
         sendMessage() {
-            this.connection.invoke('SendMessage', loggedInUser, this.newMessage, this.joinedRoomId)
-                .then(() => {
-                    this.newMessage = '';
-                }).catch((err) => {
-                    console.error(err);
-                });
+            if (!isEmptyOrWhitespace(this.newMessage)) {
+                this.connection.invoke('SendMessage', loggedInUser, this.newMessage, this.joinedRoomId)
+                    .then(() => {
+                        this.newMessage = '';
+                    }).catch((err) => {
+                        console.error(err);
+                    });
+            }
         },
         deleteMessage(id) {
             this.connection.invoke('DeleteMessage', id)
@@ -140,6 +142,9 @@ const app = Vue.createApp({
                 .catch((err) => {
                     console.log(err);
                 });
+        },
+        isEmptyOrWhitespace(input) {
+            return !input || input.trim().length === 0;
         }
     }
 });

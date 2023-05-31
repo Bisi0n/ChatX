@@ -26,7 +26,6 @@ namespace ChatX.Hubs
         {
             Account sender = await GetUserAsync(loggedInUser);
             ChatRoom chatRoom = await GetChatRoomAsync(roomId);
-
             Message message = new()
             {
                 Content = messageContent,
