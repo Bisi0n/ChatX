@@ -35,7 +35,6 @@ namespace ChatX.Hubs
                 ChatRoom = chatRoom
             };
 
-            // Save message to db
             await _db.Messages.AddAsync(message);
             await _db.SaveChangesAsync();
 
@@ -44,8 +43,6 @@ namespace ChatX.Hubs
 
         public async Task DeleteMessage(int id)
         {
-            // Delete from db here
-            // Counsult with Customer if to keep/delete the message history
             Message message = await _db.Messages.Where(m => m.Id == id).SingleAsync();
             message.IsDeleted = true;
             await _db.SaveChangesAsync();
@@ -113,9 +110,17 @@ namespace ChatX.Hubs
             await Clients.All.SendAsync("CreateChatRoom", chatRoom);
         }
 
-        public async Task DeleteChatRoom(int loggedInUser, int id)
+        public async Task DeleteChatRoom(int loggedInUser, int roomId)
         {
-            ChatRoom chatRoom = await GetChatRoomAsync(id);
+            Message[] messages = await _db.Messages.Include(m => m.Sender)
+                .Where(m => !m.IsDeleted && m.ChatRoom.Id == roomId).ToArrayAsync();
+
+            foreach (var message in messages)
+            {
+                message.IsDeleted = true;
+            }
+
+            ChatRoom chatRoom = await GetChatRoomAsync(roomId);
 
             if (chatRoom.CreatedBy.Id != loggedInUser)
             {
@@ -126,7 +131,7 @@ namespace ChatX.Hubs
 
             await _db.SaveChangesAsync();
 
-            await Clients.All.SendAsync("DeleteChatRoom", id);
+            await Clients.All.SendAsync("DeleteChatRoom", roomId);
             await Clients.All.SendAsync("SendMess");
         }
 
