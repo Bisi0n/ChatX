@@ -38,6 +38,13 @@
                         <button id="sendButton">Send</button>
                     </form>
                 </div>
+                <form class="bot" v-on:submit.prevent="loadProfiles">
+                    <input id="botInput" type="text" placeholder="Find a match" autocomplete="off" v-model="prompt" />
+                    <button>Search</button>
+                </form>
+                <div class="profile" v-for="profile in profiles">
+                    <p class="matchedProfile">You matched with: {{profile.firstName}}</p>
+                </div>
                 
             </div>
             
