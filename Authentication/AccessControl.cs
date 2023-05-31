@@ -1,4 +1,5 @@
 ﻿using ChatX.Data;
+using ChatX.Models;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 

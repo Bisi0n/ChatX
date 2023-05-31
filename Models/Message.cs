@@ -9,5 +9,6 @@
         public int? ChatRoomId { get; set; }
         public ChatRoom ChatRoom { get; set; }
         public bool IsDeleted { get; set; }
+        public List<Reaction>? Reactions { get; set; } = new List<Reaction>();
     }
 }

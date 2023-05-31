@@ -1,6 +1,4 @@
 ﻿@page
-@using ChatX.Hubs;
-@using ChatX.Authentication;
 @model IndexModel
 @inject AccessControl accessControl
 @{
@@ -8,27 +6,29 @@
 }
 
 <div class="container">
-    <h1><img src="~/js/MicrosoftTeams-image.png" /></h1>
+    <h1>
+        <img src="~/js/MicrosoftTeams-image.png" />
+    </h1>
     <div v-if="!connected">
         <p>Connecting to server...</p>
     </div>
-    <div v-if="joinedRoomId === null">
+    <div v-else-if="joinedRoomId === null">
         <h2>Available Chat Rooms</h2>
         <ul>
-                <li class="chat-room" v-for="room in chatRooms" :key="room.id">
-                    <div class="room-text">
-                        <p class="room-name">{{room.name}}</p>
-                        <p class="created-by">Created by {{room.createdBy.name}}</p>
-                    </div>
-                    <div class="join-delete-room">
-                        <button type="button" id="join-room-button" class="buttons" v-on:click="joinChatRoom(room.id)">Join</button>
-                        <button type="button"
-                            id="delete-room-button"
-                            class="buttons"
-                            v-if="room.createdBy.id === @accessControl.LoggedInAccountID"
-                            v-on:click="deleteChatRoom(room.id)">Delete</button>
-                    </div>
-                </li>
+            <li class="chat-room" v-for="room in chatRooms" :key="room.id">
+                <div class="room-text">
+                    <p class="room-name">{{room.name}}</p>
+                    <p class="created-by">Created by {{room.createdBy.name}}</p>
+                </div>
+                <div class="join-delete-room">
+                    <button type="button" id="join-room-button" class="buttons" v-on:click="joinChatRoom(room.id)">Join</button>
+                    <button type="button"
+                        id="delete-room-button"
+                        class="buttons"
+                        v-if="room.createdBy.id === @accessControl.LoggedInAccountID"
+                        v-on:click="deleteChatRoom(room.id)">Delete</button>
+                </div>
+            </li>
         </ul>
         <div>
             <form v-on:submit="createChatRoom">
@@ -37,29 +37,67 @@
                 <button class="buttons">Create Room</button>
             </form>
         </div>
-    </div>
     <div v-else>
         <div class="list-container" v-for="message in messages" :key="message.id">
             <div id="userMsg" v-if="message.sender.id === @accessControl.LoggedInAccountID">
-                <p><span class="username">@accessControl.LoggedInAccountName</span>: {{ message.content }}</p>
+
+                <p class="msgText"><span class="userMsg-span">@accessControl.LoggedInAccountName</span> {{ message.content }}</p>
+
+                <div v-if="message.reactions.length > 0">
+                    <div v-for="reaction in message.reactions">
+                        <p class="reaction-text">{{ reaction.sender.name }} {{ reaction.value }}</p>
+                    </div>
+                </div>
                 <button class="delete-mark" v-on:click="deleteMessage(message.id)"></button>
             </div>
             <div id="msg" v-else>
-                <p><span class="username">{{ message.sender.name }}</span>: {{ message.content }}</p>
+                <p class="msgText"><span class="msg-span">{{ message.sender.name }}</span> {{ message.content }}</p>
+                <div v-if="message.reactions.length > 0">
+                    <div v-for="reaction in message.reactions">
+                        <p class="reaction-text">{{ reaction.sender.name }} {{ reaction.value }}</p>
+                    </div>
+                </div>
+                <div id="reaction">
+                    <button class="emButton" v-on:click="toggelEmojiButton">👍</button>
+                    <div v-if="emojiDisplay">
+                        <button v-for="emoji in emojiReactions" :key="emoji" v-on:click="addingEmojiReaction(@accessControl.LoggedInAccountID, message.id, emoji)">{{emoji}}</button>
+                    </div>
+                </div>
             </div>
         </div>
+        <form v-on:submit.prevent="sendMessage">
+            <input id="messageInput" type="text" v-on:input="currentlyTyping" v-model="newMessage" />
+            <button id="sendButton">Send</button>
+        </form>
         <div v-if="usersCurrentlyTyping.length > 0">
             <p class="currently-typing" v-if="usersCurrentlyTyping.length === 1">
                 {{ usersCurrentlyTyping[0].name }} is typing...
-            </p>
+                </p>
             <p class="currently-typing" v-else>Several people are typing...</p>
-        </div>
-        <div id="input-container">
-            <form v-on:submit.prevent="sendMessage">
-                <input class="messageInput" type="text" v-on:input="currentlyTyping" v-model="newMessage" v-bind:disabled="roomIsRemoved" />
-                <button class="buttons" v-bind:disabled="roomIsRemoved">Send</button>
-            </form>
-            <button id="leave-button" class="buttons" v-on:click="leaveChatRoom">Leave Room</button>
         </div>
     </div>
 </div>
+<!-- <div v-else>
+    <div class="list-container" v-for="message in messages" :key="message.id">
+        <div id="userMsg" v-if="message.sender.id === @accessControl.LoggedInAccountID">
+            <p><span class="username">@accessControl.LoggedInAccountName</span>: {{ message.content }}</p>
+            <button class="delete-mark" v-on:click="deleteMessage(message.id)"></button>
+        </div>
+        <div id="msg" v-else>
+            <p><span class="username">{{ message.sender.name }}</span>: {{ message.content }}</p>
+        </div>
+    </div>
+    <div v-if="usersCurrentlyTyping.length > 0">
+        <p class="currently-typing" v-if="usersCurrentlyTyping.length === 1">
+            {{ usersCurrentlyTyping[0].name }} is typing...
+        </p>
+        <p class="currently-typing" v-else>Several people are typing...</p>
+    </div>
+    <div id="input-container">
+        <form v-on:submit.prevent="sendMessage">
+            <input class="messageInput" type="text" v-on:input="currentlyTyping" v-model="newMessage" v-bind:disabled="roomIsRemoved" />
+            <button class="buttons" v-bind:disabled="roomIsRemoved">Send</button>
+        </form>
+        <button id="leave-button" class="buttons" v-on:click="leaveChatRoom">Leave Room</button>
+    </div>
+</div> -->

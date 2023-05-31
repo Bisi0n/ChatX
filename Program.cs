@@ -1,13 +1,12 @@
 using ChatX.Authentication;
 using ChatX.Data;
-using ChatX.Hubs;
 using ChatX.Models;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using System.Security.Claims;
-
+using ChatX.Hubs;
 
 var builder = WebApplication.CreateBuilder(args);
 
