@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 
-namespace ChatX.Models
+namespace ChatX.Data
 {
     public class AccessControl
     {
