@@ -8,6 +8,7 @@ const app = Vue.createApp({
             currentUser: null,
             newChatRoom: '',
             joinedRoomId: null,
+            chatRooms: [],
             messages: [],
             newMessage: '',
             isTyping: false,
@@ -29,6 +30,18 @@ const app = Vue.createApp({
 
             this.connection.on('ReceiveMessageHistory', (messages) => {
                 this.messages = messages;
+            });
+
+            this.connection.on('ReceiveChatRooms', (chatRooms) => {
+                this.chatRooms = chatRooms;
+            });
+
+            this.connection.on('CreateChatRoom', (chatRoom) => {
+                this.chatRooms.push(chatRoom);
+            });
+
+            this.connection.on('DeleteChatRoom', (id) => {
+                this.chatRooms = this.chatRooms.filter(room => room.id !== id);
             });
 
             this.connection.on('ReceiveMessage', (message) => {
@@ -66,7 +79,7 @@ const app = Vue.createApp({
                 });
         },
         sendMessage() {
-            if (!isEmptyOrWhitespace(this.newMessage)) {
+            if (!this.isEmptyOrWhitespace(this.newMessage)) {
                 this.connection.invoke('SendMessage', loggedInUser, this.newMessage, this.joinedRoomId)
                     .then(() => {
                         this.newMessage = '';
@@ -103,10 +116,18 @@ const app = Vue.createApp({
             }, this.timeoutDuration); // Adjust the timeout duration as needed
         },
         createChatRoom() {
-            this.connection.invoke('CreateChatRoom', loggedInUser, this.newChatRoom)
-                .then(() => {
-                    this.newChatRoom = '';
-                })
+            if (!this.isEmptyOrWhitespace(this.newChatRoom)) {
+                this.connection.invoke('CreateChatRoom', loggedInUser, this.newChatRoom)
+                    .then(() => {
+                        this.newChatRoom = '';
+                    })
+                    .catch((err) => {
+                        console.log(err);
+                    });
+            }
+        },
+        deleteChatRoom(id) {
+            this.connection.invoke('DeleteChatRoom', loggedInUser, id)
                 .catch((err) => {
                     console.log(err);
                 });
@@ -116,7 +137,7 @@ const app = Vue.createApp({
                 this.leaveChatRoom();
             }
 
-            this.connection.invoke('JoinChatRoom', loggedInUser, roomId)
+            this.connection.invoke('JoinChatRoom', roomId)
                 .then(() => {
                     this.joinedRoomId = roomId;
                     this.loadPreviousMessages();

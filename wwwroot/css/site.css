@@ -15,16 +15,21 @@
 }
 
 .chat-room {
+    display: grid;
+    grid-template-areas: "text buttons";
+    align-items: center;
     border-radius: 5px;
     padding: 10px;
     margin-bottom: 8px;
     background-color: rgb(159, 156, 156);
     text-align: start;
-    list-style: none;
+    justify-content: space-between;
 }
 
 .room-name {
     font-weight: bold;
+    font-size: 24px;
+    color: rgb(226, 199, 75);
 }
 
 h1 {
@@ -33,7 +38,8 @@ h1 {
 }
 
 h2 {
-    color: rgb(224, 199, 88);
+    color: rgb(226, 199, 75);
+    margin-bottom: 10px;
 }
 
 body {
@@ -62,7 +68,7 @@ img {
 
 .buttons {
     padding: 5px;
-    background-color: rgb(159, 156, 156);
+    background-color: rgb(156, 154, 154);
     border-radius: 5px;
     margin-left: 1%;
     padding: 5px;
@@ -73,8 +79,8 @@ img {
     margin-top: 10px;
 }
 
-#messageInput {
-    background-color: rgb(159, 156, 156);
+.messageInput {
+    background-color: rgb(156, 154, 154);
     padding: 5px;
     font-size: large;
     width: 50%;
@@ -126,7 +132,7 @@ img {
     border-radius: 5px;
     padding: 10px;
     margin-bottom: 8px;
-    background-color: rgb(224, 199, 88);
+    background-color: rgb(224, 198, 88);
     text-align: start;
     list-style: none;
     margin-right: 20%

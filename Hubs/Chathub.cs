@@ -91,7 +91,7 @@ namespace ChatX.Hubs
 
 		public async Task LoadChatRooms()
 		{
-            ChatRoom[] rooms = await _db.ChatRooms.Include(r => r.CreatedBy).ToArrayAsync();
+            ChatRoom[] rooms = await _db.ChatRooms.Include(r => r.CreatedBy).Where(r => !r.IsDeleted).ToArrayAsync();
 
 			await Clients.Caller.SendAsync("ReceiveChatRooms", rooms);
 		}
@@ -109,12 +109,27 @@ namespace ChatX.Hubs
             await _db.ChatRooms.AddAsync(chatRoom);
             await _db.SaveChangesAsync();
 
-            await Clients.Caller.SendAsync("CreateChatRoom", chatRoom.GetRoomIdentifier());
+            await Clients.All.SendAsync("CreateChatRoom", chatRoom);
         }
 
-        public async Task JoinChatRoom(int loggedInUser, int roomId)
+        public async Task DeleteChatRoom(int loggedInUser, int id)
         {
-            Account user = await GetUserAsync(loggedInUser);
+            ChatRoom chatRoom = await GetChatRoomAsync(id);
+
+            if (chatRoom.CreatedBy.Id != loggedInUser)
+            {
+                return;
+            }
+
+            chatRoom.IsDeleted = true;
+
+            await _db.SaveChangesAsync();
+
+            await Clients.All.SendAsync("DeleteChatRoom", id);
+        }
+
+        public async Task JoinChatRoom(int roomId)
+        {
             ChatRoom chatRoom = await GetChatRoomAsync(roomId);
 
             await Groups.AddToGroupAsync(Context.ConnectionId, chatRoom.GetRoomIdentifier());
@@ -144,7 +159,7 @@ namespace ChatX.Hubs
 
         private async Task<ChatRoom> GetChatRoomAsync(int roomId)
         {
-            ChatRoom chatRoom = await _db.ChatRooms.Where(r => r.Id == roomId).SingleAsync();
+            ChatRoom chatRoom = await _db.ChatRooms.Include(r => r.CreatedBy).Where(r => r.Id == roomId).SingleAsync();
 
             return chatRoom;
         }

@@ -12,22 +12,30 @@
         <p>Connecting to server...</p>
     </div>
     <div v-if="joinedRoomId === null">
-        <h2>Available Chatrooms</h2>
         <ul>
-            @foreach (var room in Model.ChatRooms)
-            {
-                <li class="chat-room">
-                    <p class="room-name">@room.Name</p>
-                    <p class="created-by">Created by @room.CreatedBy.Name</p>
-                    <button v-on:click="joinChatRoom(@room.Id)">Join</button>
+                <li class="chat-room" v-for="room in chatRooms" :key="room.id">
+                    <div class="room-text">
+                        <p class="room-name">{{room.name}}</p>
+                        <p class="created-by">Created by {{room.createdBy.name}}</p>
+                    </div>
+                    <div class="join-delete-room">
+                        <button type="button" id="join-room-button" class="buttons" v-on:click="joinChatRoom(room.id)">Join</button>
+                        <button type="button"
+                            id="delete-room-button"
+                            class="buttons"
+                            v-if="room.createdBy.id === @accessControl.LoggedInAccountID"
+                            v-on:click="deleteChatRoom(room.id)">Delete</button>
+                    </div>
                 </li>
             }
         </ul>
-        <form v-on:submit="createChatRoom">
-            <label>Chatroom Name</label>
-            <input type="text" v-model="newChatRoom" />
-            <button>Create</button>
-        </form>
+        <div>
+            <form v-on:submit="createChatRoom">
+                <label>Chatroom Name</label>
+                <input class="messageInput" type="text" placeholder="Chat room name" v-model="newChatRoom" />
+                <button class="buttons">Create Room</button>
+            </form>
+        </div>
     </div>
     <div v-else>
         <div class="list-container" v-for="message in messages" :key="message.id">
@@ -47,10 +55,10 @@
         </div>
         <div id="input-container">
             <form v-on:submit.prevent="sendMessage">
-                <input id="messageInput" type="text" v-on:input="currentlyTyping" v-model="newMessage" />
+                <input class="messageInput" type="text" v-on:input="currentlyTyping" v-model="newMessage" />
                 <button class="buttons">Send</button>
             </form>
-            <button id="leave-button" class="buttons">Leave Room</button>
+            <button id="leave-button" class="buttons" v-on:click="leaveChatRoom">Leave Room</button>
         </div>
     </div>
 </div>
