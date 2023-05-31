@@ -13,6 +13,7 @@
         <p>Connecting to server...</p>
     </div>
     <div v-if="joinedRoomId === null">
+        <h2>Available Chat Rooms</h2>
         <ul>
                 <li class="chat-room" v-for="room in chatRooms" :key="room.id">
                     <div class="room-text">
@@ -55,8 +56,8 @@
         </div>
         <div id="input-container">
             <form v-on:submit.prevent="sendMessage">
-                <input class="messageInput" type="text" v-on:input="currentlyTyping" v-model="newMessage" />
-                <button class="buttons">Send</button>
+                <input class="messageInput" type="text" v-on:input="currentlyTyping" v-model="newMessage" v-bind:disabled="roomIsRemoved" />
+                <button class="buttons" v-bind:disabled="roomIsRemoved">Send</button>
             </form>
             <button id="leave-button" class="buttons" v-on:click="leaveChatRoom">Leave Room</button>
         </div>

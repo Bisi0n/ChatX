@@ -8,6 +8,7 @@ const app = Vue.createApp({
             currentUser: null,
             newChatRoom: '',
             joinedRoomId: null,
+            roomIsRemoved: false,
             chatRooms: [],
             messages: [],
             newMessage: '',
@@ -46,6 +47,11 @@ const app = Vue.createApp({
 
             this.connection.on('ReceiveMessage', (message) => {
                 this.messages.push(message);
+            });
+
+            this.connection.on('AnnounceDeletedChatRoom', (message) => {
+                this.messages.push(message);
+                this.roomIsRemoved = true;
             });
 
             this.connection.on('DeleteMessage', (id) => {
@@ -126,8 +132,17 @@ const app = Vue.createApp({
                     });
             }
         },
-        deleteChatRoom(id) {
-            this.connection.invoke('DeleteChatRoom', loggedInUser, id)
+        deleteChatRoom(roomId) {
+            this.connection.invoke('DeleteChatRoom', loggedInUser, roomId)
+                .then(() => {
+                    this.announceDeletedChatRoom(roomId);
+                })
+                .catch((err) => {
+                    console.log(err);
+                });
+        },
+        announceDeletedChatRoom(roomId) {
+            this.connection.invoke('AnnounceDeletedChatRoom', loggedInUser, roomId)
                 .catch((err) => {
                     console.log(err);
                 });
@@ -152,6 +167,7 @@ const app = Vue.createApp({
                 .then(() => {
                     this.announceActivity(false);
                     this.joinedRoomId = null;
+                    this.roomIsRemoved = false;
                     this.messages = [];
                 })
                 .catch((err) => {

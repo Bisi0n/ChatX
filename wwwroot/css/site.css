@@ -38,8 +38,6 @@ body {
     background-color: black;
 }
 
-h1 {}
-
 img {
     width: 35%;
     border-radius: 20px;
@@ -50,6 +48,7 @@ img {
 h2 {
     color: rgb(226, 199, 75);
     margin-bottom: 10px;
+    font-weight: bold;
 }
 
 body {

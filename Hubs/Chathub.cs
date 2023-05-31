@@ -1,5 +1,6 @@
 ﻿using ChatX.Data;
 using ChatX.Models;
+using Microsoft.AspNetCore.Razor.Language.Extensions;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 
@@ -126,6 +127,7 @@ namespace ChatX.Hubs
             await _db.SaveChangesAsync();
 
             await Clients.All.SendAsync("DeleteChatRoom", id);
+            await Clients.All.SendAsync("SendMess");
         }
 
         public async Task JoinChatRoom(int roomId)
@@ -141,14 +143,28 @@ namespace ChatX.Hubs
             await Groups.RemoveFromGroupAsync(Context.ConnectionId, chatRoom.GetRoomIdentifier());
         }
 
+        public async Task AnnounceDeletedChatRoom(int loggedInUser, int roomId)
+        {
+            Account user = await GetUserAsync(loggedInUser);
+            ChatRoom chatRoom = await GetChatRoomAsync(roomId);
+
+            string content = $"{user.Name} has deleted the \"{chatRoom.Name}\" chat room. Please leave this room and join a new one!";
+
+            await SendSystemMessage("AnnounceDeletedChatRoom", chatRoom, content);
+        }
+
         public async Task AnnounceActivity(int loggedInUser, int roomId, bool joined)
         {
             Account user = await GetUserAsync(loggedInUser);
             ChatRoom chatRoom = await GetChatRoomAsync(roomId);
 
             string content = joined ? $"{user.Name} joined {chatRoom.Name}!" : $"{user.Name} left {chatRoom.Name}!";
+            await SendSystemMessage("ReceiveMessage", chatRoom, content);
+        }
 
-            await Clients.Group(chatRoom.GetRoomIdentifier()).SendAsync("ReceiveMessage", new Message()
+        private async Task SendSystemMessage(string method, ChatRoom chatRoom, string content)
+        {
+            await Clients.Group(chatRoom.GetRoomIdentifier()).SendAsync(method, new Message()
             {
                 Sender = _systemAccount,
                 Content = content,
