@@ -1,4 +1,5 @@
 ﻿@using ChatX.Pages.Shared.Components.LoginMenu;
+@inject ChatX.Data.AccessControl accessControl
 
 <!DOCTYPE html>
 <html lang="en">
@@ -8,16 +9,21 @@
     <title>@ViewData["Title"]</title>
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true">
     <script src="~/js/chat.js" asp-append-version="true" defer></script>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script src="~/js/signalr/dist/browser/signalr.js"></script>
+    <script>var loggedInUser = @accessControl.LoggedInAccountID</script>
     @await RenderSectionAsync("Scripts", required: false)
 </head>
 <body>
-    <header>
-        <environment names="Development">
-            @await Component.InvokeAsync(nameof(FakeLoginMenu))
-        </environment>
-    </header>
-    <main>
-        @RenderBody()
-    </main>
+    <div id="app">
+        <header>
+            <environment names="Development">
+                @await Component.InvokeAsync(nameof(FakeLoginMenu))
+            </environment>
+        </header>
+        <main>
+            @RenderBody()
+        </main>
+    </div>
 </body>
 </html>

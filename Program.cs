@@ -81,6 +81,12 @@ builder.Services.AddAuthorization(options =>
     options.FallbackPolicy = new AuthorizationPolicyBuilder()
         .RequireAuthenticatedUser()
         .Build();
+
+    options.AddPolicy("AllowAnonymous", policy =>
+    {
+        policy.AuthenticationSchemes.Clear();
+        policy.RequireAssertion(context => true);
+    });
 });
 
 builder.Services.AddRazorPages().AddRazorRuntimeCompilation();
@@ -114,6 +120,7 @@ app.UseStaticFiles();
 app.UseRouting();
 
 app.UseAuthentication();
+app.UseCors(options => options.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
 app.UseAuthorization();
 
 app.MapRazorPages();

@@ -1,18 +1,14 @@
 ﻿using ChatX.Data;
+using ChatX.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.EntityFrameworkCore;
+using System.Collections.Immutable;
 
 namespace ChatX.Pages
 {
     public class IndexModel : PageModel
     {
-        private readonly AppDbContext database;
-
-        public IndexModel(AppDbContext database)
-        {
-            this.database = database;
-        }
-
         public void OnGet()
         {
 

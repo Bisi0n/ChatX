@@ -1,45 +1,63 @@
 ﻿@page
+@using ChatX.Hubs;
 @model IndexModel
 @inject ChatX.Models.AccessControl accessControl
 @{
-    ViewData["Title"] = "Home page";
- }
-<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
-<script src="~/js/signalr/dist/browser/signalr.js"></script>
+    ViewData["Title"] = "ChatX";
+}
 
-<main>
-    <div id="app">
-        <div class="container">
-            <div v-if="!connected">
-                <p>Connecting to server...</p>
-            </div>
-            <div v-else>
-                <h1>
-                    <img src="~/MicrosoftTeams-image.png" />
-                </h1>
-                <div class="list-container" v-for="message in messages" :key="message.id">
-                    <div id="userMsg" v-if="message.sender.id === @accessControl.LoggedInAccountID">
-                        <p>@accessControl.LoggedInAccountName: {{ message.content }}</p>
-                        <button class="delete-mark" v-on:click="deleteMessage(message.Id)"></button>
+<div class="container">
+    <h1><img src="~/js/MicrosoftTeams-image.png" /></h1>
+    <div v-if="!connected">
+        <p>Connecting to server...</p>
+    </div>
+    <div v-if="joinedRoomId === null">
+        <ul>
+                <li class="chat-room" v-for="room in chatRooms" :key="room.id">
+                    <div class="room-text">
+                        <p class="room-name">{{room.name}}</p>
+                        <p class="created-by">Created by {{room.createdBy.name}}</p>
                     </div>
-                    <div id="msg" v-else>
-                        <p>{{ message.sender.name }}: {{ message.content }}</p>
+                    <div class="join-delete-room">
+                        <button type="button" id="join-room-button" class="buttons" v-on:click="joinChatRoom(room.id)">Join</button>
+                        <button type="button"
+                            id="delete-room-button"
+                            class="buttons"
+                            v-if="room.createdBy.id === @accessControl.LoggedInAccountID"
+                            v-on:click="deleteChatRoom(room.id)">Delete</button>
                     </div>
-                </div>
-
-                <form v-on:submit.prevent="sendMessage">
-                    <input id="messageInput" type="text" v-on:input="currentlyTyping" v-model="newMessage" />
-                    <button id="sendButton">Send</button>
-                </form>
-                <div v-if="usersCurrentlyTyping.length > 0">
-                    <p class="currently-typing" v-if="usersCurrentlyTyping.length === 1">
-                        {{ usersCurrentlyTyping[0].name }} is typing...
-                        </p>
-                    <p class="currently-typing" v-else>Several people are typing...</p>
-                </div>
-            </div>
+                </li>
+        </ul>
+        <div>
+            <form v-on:submit="createChatRoom">
+                <label>Chatroom Name</label>
+                <input class="messageInput" type="text" placeholder="Chat room name" v-model="newChatRoom" />
+                <button class="buttons">Create Room</button>
+            </form>
         </div>
     </div>
-</main>
-
-<script>var loggedInUser = @accessControl.LoggedInAccountID</script>
+    <div v-else>
+        <div class="list-container" v-for="message in messages" :key="message.id">
+            <div id="userMsg" v-if="message.sender.id === @accessControl.LoggedInAccountID">
+                <p><span class="username">@accessControl.LoggedInAccountName</span>: {{ message.content }}</p>
+                <button class="delete-mark" v-on:click="deleteMessage(message.id)"></button>
+            </div>
+            <div id="msg" v-else>
+                <p><span class="username">{{ message.sender.name }}</span>: {{ message.content }}</p>
+            </div>
+        </div>
+        <div v-if="usersCurrentlyTyping.length > 0">
+            <p class="currently-typing" v-if="usersCurrentlyTyping.length === 1">
+                {{ usersCurrentlyTyping[0].name }} is typing...
+            </p>
+            <p class="currently-typing" v-else>Several people are typing...</p>
+        </div>
+        <div id="input-container">
+            <form v-on:submit.prevent="sendMessage">
+                <input class="messageInput" type="text" v-on:input="currentlyTyping" v-model="newMessage" />
+                <button class="buttons">Send</button>
+            </form>
+            <button id="leave-button" class="buttons" v-on:click="leaveChatRoom">Leave Room</button>
+        </div>
+    </div>
+</div>

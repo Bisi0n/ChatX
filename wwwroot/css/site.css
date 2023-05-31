@@ -1,16 +1,45 @@
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&display=swap');
+
 * {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
     margin-left: auto;
     margin-right: auto;
+    font-family: 'Open Sans', sans-serif;
+    font-weight: normal;
+}
+
+.username {
+    font-weight: bold;
+}
+
+.chat-room {
+    display: grid;
+    grid-template-areas: "text buttons";
+    align-items: center;
+    border-radius: 5px;
+    padding: 10px;
+    margin-bottom: 8px;
+    background-color: rgb(159, 156, 156);
+    text-align: start;
+    justify-content: space-between;
+}
+
+.room-name {
+    font-weight: bold;
+    font-size: 24px;
+    color: rgb(226, 199, 75);
+}
 
 }
+
 body {
     background-color: black;
 }
-h1{
-}
+
+h1 {}
+
 img {
     width: 35%;
     border-radius: 20px;
@@ -18,33 +47,53 @@ img {
     margin-top: 0;
 }
 
-.container{
+h2 {
+    color: rgb(226, 199, 75);
+    margin-bottom: 10px;
+}
+
+body {
+    background-color: black;
+}
+
+img {
+    width: 25%;
+    margin-top: 0;
+}
+
+.container {
     text-align: center;
     border-radius: 10px;
-    margin-top: 5%;
     padding: 10px;
     max-width: 60rem;
+    min-height: 100vh;
 }
 
 .input-container {
     display: grid;
     grid-template:
-        "a b"/ 70% 30%;
+        "a b" / 70% 30%;
+    margin-top: 5%;
 }
 
-#sendButton {
+.buttons {
     padding: 5px;
-    background-color: rgb(159, 156, 156);
+    background-color: rgb(156, 154, 154);
     border-radius: 5px;
     margin-left: 1%;
-    padding: 1%;
+    padding: 5px;
     font-size: large;
 }
-#messageInput{
-    background-color: rgb(159, 156, 156);
-    padding: 1%;
+
+#leave-button {
+    margin-top: 10px;
+}
+
+.messageInput {
+    background-color: rgb(156, 154, 154);
+    padding: 5px;
     font-size: large;
-    width: 60%;
+    width: 50%;
     border-radius: 5px;
 }
 
@@ -56,61 +105,55 @@ img {
 
 .list-container {
     flex: 1;
+    width: 100%;
+    margin-bottom: 20px;
     overflow-y: auto;
-    min-height: 10vh;
-    text-align: start;
-    width: 90%;
 }
 
-#userMsg:hover .delete-mark{
-    display:grid;
+#userMsg:hover .delete-mark {
+    display: grid;
 }
 
 .delete-mark::before {
     content: '❌';
 }
 
-.delete-mark{
-    background-color:  rgb(159, 156, 156);
+.delete-mark {
+    background-color: rgb(159, 156, 156);
     border: none;
     box-shadow: none;
     display: none;
 }
 
-#userMsg{
+.list-container:hover .delete-mark {
     display: grid;
-    grid-template: 
-        'a b'/ 90%;
+}
+
+#userMsg {
+    display: grid;
+    grid-template:
+        'a b' / 90%;
     border-radius: 5px;
     padding: 10px;
     background-color: rgb(159, 156, 156);
     list-style: none;
-    margin-left: 30%;
+    margin-left: 20%;
 }
 
-#msg{
+#msg {
     border-radius: 5px;
     padding: 10px;
-    background-color: rgb(193, 165, 3);
+    margin-bottom: 8px;
+    background-color: rgb(224, 198, 88);
+    text-align: start;
     list-style: none;
-    margin-right: 30%;
+    margin-right: 20%
 }
 
-
-#file-container{
-    color: white;
-    border: solid;
-    margin-top: 5%;
-    padding: 2%;
+/*Fix this later*/
+.currently-typing {
+    color: whitesmoke;
+    font-size: medium;
+    margin-top: 1%;
+    margin-bottom: 1%;
 }
-.currently-typing{
-    color: white;
-    margin-top: 10px;
-    margin-bottom: 10px;
-    font-size: 12px;
-}
-
-
-
-
-
