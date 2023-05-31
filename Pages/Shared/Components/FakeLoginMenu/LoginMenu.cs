@@ -2,6 +2,7 @@
 using ChatX.Data;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using ChatX.Authentication;
 
 namespace ChatX.Pages.Shared.Components.LoginMenu
 {

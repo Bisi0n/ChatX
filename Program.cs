@@ -1,3 +1,4 @@
+using ChatX.Authentication;
 using ChatX.Data;
 using ChatX.Hubs;
 using ChatX.Models;

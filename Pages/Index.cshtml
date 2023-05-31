@@ -1,7 +1,8 @@
 ﻿@page
 @using ChatX.Hubs;
+@using ChatX.Authentication;
 @model IndexModel
-@inject ChatX.Data.AccessControl accessControl
+@inject AccessControl accessControl
 @{
     ViewData["Title"] = "ChatX";
 }
