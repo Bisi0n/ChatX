@@ -3,6 +3,9 @@ using ChatX.Models;
 using Microsoft.AspNetCore.Razor.Language.Extensions;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
+using System.Diagnostics;
+using System.Net;
 
 namespace ChatX.Hubs
 {
@@ -11,8 +14,10 @@ namespace ChatX.Hubs
         private readonly AppDbContext _db;
         private Dictionary<string, List<Account>> _usersCurrentlyTyping;
         private readonly Account _systemAccount;
+        private readonly HttpClient _httpClient;
+        private readonly string[] _interests = { "travel", "literature", "music", "sports", "film", "art", "cooking", "photography", "gardening", "programming" };
 
-        public Chathub(AppDbContext context)
+        public Chathub(AppDbContext context, HttpClient httpClient)
         {
             _db = context;
             _usersCurrentlyTyping = new();
@@ -21,6 +26,7 @@ namespace ChatX.Hubs
                 Id = -1,
                 Name = "System"
             };
+            _httpClient = httpClient;
         }
 
         public async Task SendMessage(int loggedInUser, string messageContent, int roomId)
@@ -165,6 +171,28 @@ namespace ChatX.Hubs
 
             string content = joined ? $"{user.Name} joined {chatRoom.Name}!" : $"{user.Name} left {chatRoom.Name}!";
             await SendSystemMessage("ReceiveMessage", chatRoom, content);
+        }
+
+        public async Task GetDateMatch(string input)
+        {
+            DateMatch? match = null;
+
+            string? matchedInterest = _interests.FirstOrDefault(interest => input.ToLower().Contains(interest));
+
+            if (!string.IsNullOrEmpty(matchedInterest))
+            {
+                string url = $"https://tinderapp.azurewebsites.net/users/{matchedInterest}";
+                var response = await _httpClient.GetAsync(url);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    string apiResponse = await response.Content.ReadAsStringAsync();
+                    match = JsonConvert.DeserializeObject<DateMatch>(apiResponse);
+
+                }
+            }
+
+            await Clients.Caller.SendAsync("ReceiveDateMatch", match);
         }
 
         private async Task SendSystemMessage(string method, ChatRoom chatRoom, string content)

@@ -99,6 +99,7 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<AccessControl>();
+builder.Services.AddHttpClient();
 
 builder.Services.AddSignalR();
 

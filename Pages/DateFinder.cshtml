@@ -1,0 +1,26 @@
+﻿@page
+@using ChatX.Authentication;
+@model ChatX.Pages.DateFinderModel
+@inject AccessControl accessControl
+@{
+}
+
+<div class="container">
+    <h1><img src="~/js/MicrosoftTeams-image.png" /></h1>
+    <h2>Date Finder</h2>
+    <div class="list-container" v-for="message in dateBotMessages">
+        <div id="userMsg" v-if="message.sender === @accessControl.LoggedInAccountID">
+            <p><span class="username">@accessControl.LoggedInAccountName</span>: {{ message.content }}</p>
+        </div>
+        <div id="msg" v-else>
+            <p><span class="username">{{ message.sender.name }}</span>: <span v-if="message.isHtml" v-html="message.content"></span>
+                <span v-else>{{ message.content }}</span></p>
+        </div>
+    </div>
+    <div id="input-container">
+        <form v-on:submit.prevent="getDateMatch">
+            <input class="messageInput" type="text" v-model="dateFinderInput" />
+            <button class="buttons">Send</button>
+        </form>
+    </div>
+</div>

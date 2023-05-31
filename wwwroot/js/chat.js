@@ -11,11 +11,18 @@ const app = Vue.createApp({
             roomIsRemoved: false,
             chatRooms: [],
             messages: [],
+            dateBotMessages: [{
+                sender: {
+                    name: 'DateBot'
+                },
+                content: 'Hello, I\'m DateBot! Tell me something you\'re interested in and I\'ll try to match you with someone!'
+            }],
             newMessage: '',
             isTyping: false,
             typingTimeout: null,
             usersCurrentlyTyping: [],
-            timeoutDuration: 2500
+            timeoutDuration: 2500,
+            dateFinderInput: ''
         };
     },
     mounted() {
@@ -60,6 +67,60 @@ const app = Vue.createApp({
 
             this.connection.on('CurrentlyTyping', (usersTyping) => {
                 this.usersCurrentlyTyping = usersTyping;
+            });
+
+            this.connection.on('ReceiveDateMatch', (match) => {
+                if (match !== null) {
+                    var interests = '';
+
+                    if (match.userInterests.length === 1) {
+                        interests = array[0];
+                    }
+                    else if (match.userInterests.length === 2) {
+                        interests = array.join(" and ");
+                    }
+                    else {
+                        const lastElement = match.userInterests.pop();
+                        interests = `${match.userInterests.join(", ")} and ${lastElement}`;
+                    }
+
+                    var outputStrings = [
+                        'I found a match! Here is some information about them:',
+                        `Name: ${match.firstName} ${match.lastName}`,
+                        `Age: ${match.age} years old`,
+                        `Personality: ${match.personalityType}`,
+                        `Description: ${match.description}`,
+                        `They're interested in ${interests}!`,
+                        `Here's a link to their profile <a href="${match.profileUrl}" target="_blank">${match.profileUrl}</a>`
+                    ];
+
+                    outputStrings.forEach((message) => {
+                        if (message.includes('<a')) {
+                            this.dateBotMessages.push({
+                                sender: {
+                                    name: 'DateBot'
+                                },
+                                content: message,
+                                isHtml: true
+                            });
+                        } else {
+                            this.dateBotMessages.push({
+                                sender: {
+                                    name: 'DateBot'
+                                },
+                                content: message
+                            });
+                        }
+                    });
+                }
+                else {
+                    this.messages.push({
+                        sender: {
+                            name: 'DateBot'
+                        },
+                        content: 'Sorry, I didn\'t find a match... Try again with another interest that you have!'
+                    });
+                }
             });
 
             this.connection.start()
@@ -182,6 +243,20 @@ const app = Vue.createApp({
         },
         isEmptyOrWhitespace(input) {
             return !input || input.trim().length === 0;
+        },
+        getDateMatch() {
+            this.dateBotMessages.push({
+                sender: loggedInUser,
+                content: this.dateFinderInput
+            });
+
+            this.connection.invoke('GetDateMatch', this.dateFinderInput)
+                .then(() => {
+                    this.dateFinderInput = '';
+                })
+                .catch((err) => {
+                    console.log(err)
+                });
         }
     }
 });
