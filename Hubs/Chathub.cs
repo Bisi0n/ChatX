@@ -12,7 +12,7 @@ namespace ChatX.Hubs
         private Dictionary<string, List<Account>> _usersCurrentlyTyping;
         private readonly Account _systemAccount;
 
-        public Chathub (AppDbContext context)
+        public Chathub(AppDbContext context)
         {
             _db = context;
             _usersCurrentlyTyping = new();
@@ -55,12 +55,10 @@ namespace ChatX.Hubs
 
         public async Task LoadPreviousMessages(int roomId)
         {
-            Message[] messages = await _db.Messages
-                .Include(m => m.Sender)
-                .Include(m => m.Reactions)
+            Message[] messages = await _db.Messages.Include(m => m.Sender)
                 .Where(m => !m.IsDeleted && m.ChatRoom.Id == roomId).ToArrayAsync();
 
-            await Clients.All.SendAsync("ReceiveMessageHistory", messages);
+            await Clients.Caller.SendAsync("ReceiveMessageHistory", messages);
         }
 
         public async Task UserTyping(int loggedInUser, bool isTyping, int roomId)
@@ -164,24 +162,6 @@ namespace ChatX.Hubs
             await SendSystemMessage("ReceiveMessage", chatRoom, content);
         }
 
-        public async Task AddEmojiReaction( int senderId ,int messageId, string emoji)
-        {
-            Message message = await _db.Messages.Where(m => m.Id == messageId).SingleAsync();
-            Account senderAccount = await GetUserAsync(senderId);
-
-            Reaction newEmoji = new()
-            {
-                Value = emoji,
-                Sender = senderAccount,
-            };
-
-            message.Reactions.Add(newEmoji);
-            _db.SaveChanges();
-
-            await LoadPreviousMessages();
-            //await Clients.All.SendAsync("ReceiveEmojiReaction", message);
-        }
-
         private async Task SendSystemMessage(string method, ChatRoom chatRoom, string content)
         {
             await Clients.Group(chatRoom.GetRoomIdentifier()).SendAsync(method, new Message()
@@ -192,7 +172,6 @@ namespace ChatX.Hubs
                 ChatRoom = chatRoom
             });
         }
-        
 
         private async Task<ChatRoom> GetChatRoomAsync(int roomId)
         {
@@ -207,6 +186,5 @@ namespace ChatX.Hubs
 
             return user;
         }
-
     }
 }

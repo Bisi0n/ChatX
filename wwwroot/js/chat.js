@@ -15,9 +15,7 @@ const app = Vue.createApp({
             isTyping: false,
             typingTimeout: null,
             usersCurrentlyTyping: [],
-            timeoutDuration: 2500,
-            emojiReactions: ['👍', '❤️', '😄', '😊', '😮', '😢', '🤥', '🎃', '🍸'],
-            emojiDisplay: false
+            timeoutDuration: 2500
         };
     },
     mounted() {
@@ -133,16 +131,6 @@ const app = Vue.createApp({
                         console.log(err);
                     });
             }
-        },
-        addingEmojiReaction(senderId, messageId, emoji) {
-            this.connection.invoke('AddEmojiReaction', senderId, messageId, emoji).catch((err) => {
-                console.error(err);
-            });
-
-            this.toggleEmojiButton();
-        },
-        toggleEmojiButton() {
-            this.emojiDisplay = !this.emojiDisplay;
         },
         deleteChatRoom(roomId) {
             this.connection.invoke('DeleteChatRoom', loggedInUser, roomId)
