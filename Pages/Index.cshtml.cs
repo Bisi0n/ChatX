@@ -9,9 +9,9 @@ namespace ChatX.Pages
 {
     public class IndexModel : PageModel
     {
-        public void OnGet()
-        {
-
-        }
-    }
+		public IActionResult OnPostRedirect()
+		{
+			return RedirectToPage("/DateFinder");
+		}
+	}
 }

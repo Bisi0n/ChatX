@@ -61,10 +61,9 @@
                 <input class="messageInput" type="text" v-on:input="currentlyTyping" v-model="newMessage" v-bind:disabled="roomIsRemoved" />
                 <button class="buttons" v-bind:disabled="roomIsRemoved">Send</button>
             </form>
-            <form class="bot" v-on:submit.prevent="loadProfiles">
-                <h3>ChatBot - Find a Match Today!</h3>
-                <input id="botInput" type="text" placeholder="Find a match" autocomplete="off" v-model="prompt" />
-                <button>Search</button>
+            <form class="bot" method="post">
+                <h3>DateBot - Find a Match Today!</h3>
+                <button type="submit" asp-page-handler="Redirect">Go to DateBot!</button>
             </form>
             <button id="leave-button" class="buttons" v-on:click="leaveChatRoom">Leave Room</button>
             <div class="profile" v-for="profile in profiles">
