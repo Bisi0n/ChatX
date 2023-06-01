@@ -15,20 +15,22 @@
     <div v-if="joinedRoomId === null">
         <h2>Available Chat Rooms</h2>
         <ul>
-                <li class="chat-room" v-for="room in chatRooms" :key="room.id">
-                    <div class="room-text">
-                        <p class="room-name">{{room.name}}</p>
-                        <p class="created-by">Created by {{room.createdBy.name}}</p>
-                    </div>
-                    <div class="join-delete-room">
-                        <button type="button" id="join-room-button" class="buttons" v-on:click="joinChatRoom(room.id)">Join</button>
-                        <button type="button"
+            <li class="chat-room" v-for="room in chatRooms" :key="room.id">
+                <div class="room-text">
+                    <p class="room-name">{{room.name}}</p>
+                    <p class="created-by">Created by {{room.createdBy.name}}</p>
+                </div>
+                <div class="join-delete-room">
+                    <button type="button" id="join-room-button" class="buttons" v-on:click="joinChatRoom(room.id)">Join</button>
+                    <button type="button"
                             id="delete-room-button"
                             class="buttons"
                             v-if="room.createdBy.id === @accessControl.LoggedInAccountID"
-                            v-on:click="deleteChatRoom(room.id)">Delete</button>
-                    </div>
-                </li>
+                            v-on:click="deleteChatRoom(room.id)">
+                        Delete
+                    </button>
+                </div>
+            </li>
         </ul>
         <div>
             <form v-on:submit="createChatRoom">
@@ -48,9 +50,6 @@
                 <p><span class="username">{{ message.sender.name }}</span>: {{ message.content }}</p>
             </div>
         </div>
-         <div class="profile" v-for="profile in profiles">
-                <p class="matchedProfile">You matched with: {{profile.firstName}} {{profile.lastName}} {{profile.Age}}</p>
-         </div>
         <div v-if="usersCurrentlyTyping.length > 0">
             <p class="currently-typing" v-if="usersCurrentlyTyping.length === 1">
                 {{ usersCurrentlyTyping[0].name }} is typing...
@@ -63,10 +62,14 @@
                 <button class="buttons" v-bind:disabled="roomIsRemoved">Send</button>
             </form>
             <form class="bot" v-on:submit.prevent="loadProfiles">
+                <h3>ChatBot - Find a Match Today!</h3>
                 <input id="botInput" type="text" placeholder="Find a match" autocomplete="off" v-model="prompt" />
                 <button>Search</button>
             </form>
             <button id="leave-button" class="buttons" v-on:click="leaveChatRoom">Leave Room</button>
+            <div class="profile" v-for="profile in profiles">
+                <p class="matchedProfile">You matched with: {{profile.firstName}} {{profile.lastName}} {{profile.age}}</p>
+            </div>
         </div>
     </div>
 </div>

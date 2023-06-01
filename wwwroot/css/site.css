@@ -178,3 +178,12 @@ img {
     margin: 15px;
     border-radius: 10px;
 }
+h3 {
+    color: whitesmoke;
+}
+
+.profile {
+    position: fixed;
+    bottom: 11%;
+    margin-left:30%;
+}
