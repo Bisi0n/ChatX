@@ -15,7 +15,12 @@ const app = Vue.createApp({
             isTyping: false,
             typingTimeout: null,
             usersCurrentlyTyping: [],
-            timeoutDuration: 2500
+            timeoutDuration: 2500,
+            api: 'https://tinderapp.azurewebsites.net/Users',
+            interests: ['sports', 'music', 'travel', 'literature', 'film',
+                'art', 'cooking', 'photography', 'gardening', 'programming'],
+            prompt: '',
+            profiles: []
         };
     },
     mounted() {
@@ -182,6 +187,19 @@ const app = Vue.createApp({
         },
         isEmptyOrWhitespace(input) {
             return !input || input.trim().length === 0;
+        },
+        loadProfiles() {
+            fetch(this.matchProfile())
+                .then(response => response.json())
+                .then(data => this.profiles.push(data))
+        },
+        matchProfile() {
+            for (const interest of this.interests) {
+                if (this.prompt.includes(interest)) {
+                    return this.api + '/' + interest;
+                }
+            }
+            return '';
         }
     }
 });

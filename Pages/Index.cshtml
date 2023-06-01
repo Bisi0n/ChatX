@@ -48,6 +48,9 @@
                 <p><span class="username">{{ message.sender.name }}</span>: {{ message.content }}</p>
             </div>
         </div>
+         <div class="profile" v-for="profile in profiles">
+                <p class="matchedProfile">You matched with: {{profile.firstName}} {{profile.lastName}} {{profile.Age}}</p>
+         </div>
         <div v-if="usersCurrentlyTyping.length > 0">
             <p class="currently-typing" v-if="usersCurrentlyTyping.length === 1">
                 {{ usersCurrentlyTyping[0].name }} is typing...
@@ -58,6 +61,10 @@
             <form v-on:submit.prevent="sendMessage">
                 <input class="messageInput" type="text" v-on:input="currentlyTyping" v-model="newMessage" v-bind:disabled="roomIsRemoved" />
                 <button class="buttons" v-bind:disabled="roomIsRemoved">Send</button>
+            </form>
+            <form class="bot" v-on:submit.prevent="loadProfiles">
+                <input id="botInput" type="text" placeholder="Find a match" autocomplete="off" v-model="prompt" />
+                <button>Search</button>
             </form>
             <button id="leave-button" class="buttons" v-on:click="leaveChatRoom">Leave Room</button>
         </div>

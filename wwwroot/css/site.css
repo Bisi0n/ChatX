@@ -156,3 +156,25 @@ img {
     margin-top: 1%;
     margin-bottom: 1%;
 }
+
+.matchedProfile {
+    color: whitesmoke;
+}
+
+.bot {
+    position: fixed;
+    bottom: 5%;
+    right: 200px;
+}
+
+#botInput {
+    display: flex;
+    flex-direction: column;
+    overflow: scroll;
+    height: 90%;
+    width: 100%;
+    background-color: white;
+    padding: 15px;
+    margin: 15px;
+    border-radius: 10px;
+}
