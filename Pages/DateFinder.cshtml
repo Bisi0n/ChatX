@@ -10,10 +10,10 @@
     <h2>Date Finder</h2>
     <div class="list-container" v-for="message in dateBotMessages">
         <div id="userMsg" v-if="message.sender === @accessControl.LoggedInAccountID">
-            <p><span class="username">@accessControl.LoggedInAccountName</span>: {{ message.content }}</p>
+            <p><span class="username">@accessControl.LoggedInAccountName</span> {{ message.content }}</p>
         </div>
         <div id="msg" v-else>
-            <p><span class="username">{{ message.sender.name }}</span>: <span v-if="message.isHtml" v-html="message.content"></span>
+            <p><span class="username">{{ message.sender.name }}</span> <span v-if="message.isHtml" v-html="message.content"></span>
                 <span v-else>{{ message.content }}</span></p>
         </div>
     </div>
