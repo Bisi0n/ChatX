@@ -1,9 +1,21 @@
 <p align="center">
-  <img src="https://github.com/Bisi0n/ChatX/blob/main/MicrosoftTeams-image.png">
+  <img width="200" height="200" src="https://github.com/Bisi0n/ChatX/blob/main/MicrosoftTeams-image.png">
 </p>
 
-# ChatX
+<h1 align="center">
+  ChatX 
+</h1>
+<p align="center">Fast and Real-Time Communications</p>
 
+<div align="center">
+
+  [![Status](https://img.shields.io/badge/status-active-success.svg)](https://chatx-app.azurewebsites.net/) 
+  [![GitHub Issues](https://img.shields.io/github/issues/kylelobo/The-Documentation-Compendium.svg)](https://github.com/Bisi0n/ChatX/issues)
+  [![GitHub Pull Requests](https://img.shields.io/github/issues-pr/kylelobo/The-Documentation-Compendium.svg)](https://github.com/Bisi0n/ChatX/pulls)
+
+</div>  
+  
+## Introduction
 ChatX app is a real-time messaging application that allows users to communicate with each other in a seamless and interactive manner. It provides a user-friendly interface for sending and receiving messages, as well as various features for enhancing the messaging experience.
 
 ## Key Features
@@ -37,7 +49,6 @@ ChatX is built using modern web technologies, including:
 ## Contributing
 Contributions to Chatx App are welcome! If you encounter any issues, have suggestions, or would like to contribute to the project, feel free to submit a pull request or open an issue in the project repository.
 
-## License
-ChatX App is released under the MIT License, which means it is open-source and free to use and modify for personal and commercial purposes.
+
 
 
