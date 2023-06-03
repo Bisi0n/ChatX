@@ -1,4 +1,7 @@
-![Chatx Logo](https://github.com/Bisi0n/ChatX/blob/main/MicrosoftTeams-image.png)
+<p align="center">
+  <img src="https://github.com/Bisi0n/ChatX/blob/main/MicrosoftTeams-image.png">
+</p>
+
 # ChatX
 
 ChatX app is a real-time messaging application that allows users to communicate with each other in a seamless and interactive manner. It provides a user-friendly interface for sending and receiving messages, as well as various features for enhancing the messaging experience.
