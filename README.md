@@ -10,7 +10,7 @@
 <div align="center">
 
   [![Status](https://img.shields.io/badge/status-active-success.svg)](https://chatx-app.azurewebsites.net/) 
-  [![GitHub Issues](https://img.shields.io/github/issues/kylelobo/The-Documentation-Compendium.svg)](https://github.com/Bisi0n/ChatX/issues)
+ ![GitHub issues](https://img.shields.io/github/issues-raw/Bisi0n/ChatX)
   [![GitHub Pull Requests](https://img.shields.io/github/issues-pr/kylelobo/The-Documentation-Compendium.svg)](https://github.com/Bisi0n/ChatX/pulls)
 
 </div>  
