@@ -1,11 +1,8 @@
 ﻿using ChatX.Data;
 using ChatX.Models;
-using Microsoft.AspNetCore.Razor.Language.Extensions;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
-using System.Diagnostics;
-using System.Net;
 
 namespace ChatX.Hubs
 {
