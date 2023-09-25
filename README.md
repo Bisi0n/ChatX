@@ -1,5 +1,5 @@
 <p align="center">
-  <img width="200" height="200" src="https://github.com/Bisi0n/ChatX/blob/main/MicrosoftTeams-image.png">
+  <img width="200" height="200"  border-radius="50%" src="https://github.com/Bisi0n/ChatX/blob/main/MicrosoftTeams-image.png">
 </p>
 
 <h1 align="center">
